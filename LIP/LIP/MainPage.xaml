@@ -4,11 +4,44 @@
              xmlns:local="clr-namespace:LIP"
              x:Class="LIP.MainPage">
 
-    <StackLayout>
+    <StackLayout Padding="20">
         <!-- Place new controls here -->
-    	<Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
+    	
+
+        <StackLayout Padding="0,30,0,30">
+            <Label Margin="10"  Text="Levantado de Inventario" 
+           HorizontalOptions="Center" 
+           VerticalOptions="Center"
+           FontSize="Large"/>
+            <Image HeightRequest="100" WidthRequest="100" Source="Cuaderno.jpg"></Image>
+        </StackLayout>
+
+
+        <Picker HorizontalOptions="Fill" FontSize="Large" Title="Sucursal" x:Name="Sucursales">
+            <Picker.Items>
+            </Picker.Items>
+        </Picker>
+
+        <Picker HorizontalOptions="Fill" FontSize="Large" Title="Parcial" >
+            <Picker.Items>
+                <x:String>Parcial 1</x:String>
+                <x:String>Parcial 2</x:String>
+                <x:String>Parcial 3</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <Picker HorizontalOptions="Fill" FontSize="Large" Title="Ubicacion" >
+            <Picker.Items>
+                <x:String>Parcial 1</x:String>
+                <x:String>Parcial 2</x:String>
+                <x:String>Parcial 3</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <StackLayout Margin="0,50,0,0">
+            <Button Text="Comenzar Levantado" HorizontalOptions="CenterAndExpand" BackgroundColor="DarkCyan" TextColor="WhiteSmoke" Clicked="Button_Clicked">
+            </Button>
+        </StackLayout>
     </StackLayout>
 
 </ContentPage>

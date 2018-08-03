@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LIP.BuscarProductoPage">
+
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="buscar Productos" ></ToolbarItem>
+        <ToolbarItem Name="" Icon="" Priority="0"></ToolbarItem>
+        <ToolbarItem Name="" Icon="" Priority="0"></ToolbarItem>
+        <ToolbarItem Name="" Icon="" Priority="0"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+  
+    <StackLayout Margin="10" Orientation="Vertical" >
+        <Entry Placeholder="Buscar Producto" TextChanged="Entry_TextChanged" HorizontalTextAlignment="Center"></Entry>
+        <ListView  IsPullToRefreshEnabled="False" x:Name="lvwProductos" ItemSelected="lvwProductos_ItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <ViewCell Tapped="ViewCell_Tapped">
+                        <StackLayout Orientation="Vertical">
+                            <StackLayout Orientation="Horizontal">
+                                <Image WidthRequest="40" Source="Producto.png"/>
+                                     <StackLayout Orientation="Vertical">
+                                        <Label Text="{Binding Codigo}"
+                                            TextColor="#f35e20" />
+                                        <Label Text="{Binding Nombre}"
+                                            HorizontalOptions="FillAndExpand"
+                                            TextColor="#503026" />
+                                </StackLayout>
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
+                            <!--<TextCell TextColor="Black"  Text="{Binding Nombre}" Detail="{Binding Codigo}"></TextCell>-->
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--<Button Text="MostrarPop" Clicked="Button_Clicked"></Button>-->
+    </StackLayout>
+ 
+</ContentPage>
