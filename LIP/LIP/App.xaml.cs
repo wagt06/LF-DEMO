@@ -7,12 +7,15 @@ namespace LIP
 {
 	public partial class App : Application
 	{
-		public App ()
+        public App ()
 		{
 			InitializeComponent();
 
 			//MainPage = new NavigationPage(new MainPage());
-            MainPage = new NavigationPage();
+            MainPage = new NavigationPage(new LoginPage());
+            Acr.UserDialogs.UserDialogs.Init(() => (Android.App.Activity)Forms.Context);
+
+
         }
 
 		protected override void OnStart ()

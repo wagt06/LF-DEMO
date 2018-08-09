@@ -16,12 +16,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)AsyncHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuscarProductoPage.xaml.cs">
       <DependentUpon>BuscarProductoPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Conexion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccess.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entidades\Auth.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entidades\Lista.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entidades\ListModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entidades\Producto.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entidades\Respuesta.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IgresarProductosPage.xaml.cs">
       <DependentUpon>IgresarProductosPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -35,6 +41,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Productos.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\EstantesServices.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\LoginServices.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ServicesApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SqliteService .cs" />
   </ItemGroup>
   <ItemGroup>

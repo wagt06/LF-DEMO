@@ -15,15 +15,16 @@ namespace LIP
 	{
         ObservableCollection<Productos> o = new ObservableCollection<Productos>();
         Conexion c = new Conexion();
-        DataAccess db;
+        DataAccess db = new DataAccess();
+        public Entidades.Auth Usuario = new Entidades.Auth();
         public BuscarProductoPage ()
 		{
 			InitializeComponent ();
-            db = new DataAccess();
-            if (db.NumeroRegistros() == 0) {
-                db.Insertmassive();
-            }
             this.lvwProductos.ItemsSource = db.GetAllProd();
+        }
+
+        public void Load() {
+            this.tbDatos.Text = "Conteo: " + Usuario.Conteo + "Estante : " + Usuario.Codigo_Ubicacion;
         }
 
         private void Button_Clicked(object sender, EventArgs e)

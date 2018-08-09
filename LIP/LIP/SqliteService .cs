@@ -12,12 +12,15 @@ namespace LIP
     class SqliteService : ISQLite
     {
             public SqliteService() { }
+            public Boolean ExistBd = new Boolean();
 
-  
          SQLite.SQLiteConnection ISQLite.GetConnection()
         {
             try
             {
+
+                //Extraer bd desde el Dispositivo
+                //adb pull /data/user/0/com.companyname/files/SQLiteEx.db3  C:\Users\William.gonzalez
                 var sqliteFilename = "SQLiteEx.db3";
                 string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal); // Documents folder
                 var path = Path.Combine(documentsPath, sqliteFilename);
@@ -35,7 +38,6 @@ namespace LIP
                 throw;
             }
         }
-      
         void ReadWriteStream(Stream readStream, Stream writeStream)
         {
             int Length = 256;
