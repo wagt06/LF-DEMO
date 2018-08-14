@@ -2,10 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:LIP"
-             x:Class="LIP.MainPage">
-
+             x:Class="LIP.MainPage"
+             NavigationPage.HasBackButton="False"
+            >
+    <ContentPage.ToolbarItems  >
+        <ToolbarItem Name="ActEstantes" Clicked="ActEstantes_Clicked" Text="Actualizar Estantes" Icon="" Priority="0"></ToolbarItem>
+    </ContentPage.ToolbarItems>
     <StackLayout Padding="20">
         <!-- Place new controls here -->
+        
+        
         <StackLayout Padding="10,20,10,30" BackgroundColor="LightGray">
             <Grid>
                 <Grid.RowDefinitions>
@@ -23,6 +29,8 @@
             <Label FontAttributes="Bold" Grid.Row="1" Grid.Column="1"  x:Name="lblSucursal" />
             <Label Grid.Row="2" Grid.Column="0" Text="Bodega: "/>
             <Label FontAttributes="Bold" Grid.Row="2" Grid.Column="1"  x:Name="lblBodega" />
+            <Label Grid.Row="3" Grid.Column="0" Text="Estante Actual: "/>
+            <Label FontAttributes="Bold" Grid.Row="3" Grid.Column="1"  x:Name="lblEstante" />
         </StackLayout>
 
         <Picker SelectedIndexChanged="Estantes_SelectedIndexChanged"

@@ -11,11 +11,13 @@ namespace LIP
 		{
 			InitializeComponent();
 
-			//MainPage = new NavigationPage(new MainPage());
-            MainPage = new NavigationPage(new LoginPage());
+            NavigationPage Nav = new NavigationPage(new LoginPage());
+            Nav.Popped += (sender, e) => {
+            };
+            //MainPage = new NavigationPage(new MainPage());
+            MainPage = Nav;
+
             Acr.UserDialogs.UserDialogs.Init(() => (Android.App.Activity)Forms.Context);
-
-
         }
 
 		protected override void OnStart ()

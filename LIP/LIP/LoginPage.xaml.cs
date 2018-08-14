@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using System.IO;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,75 +16,143 @@ namespace LIP
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage
     {
+        ShowToastPopUp toast = new ShowToastPopUp();
+        Boolean Session = new Boolean();
+        CancellationTokenSource TokenSource = new CancellationTokenSource();
         public LoginPage()
         {
             InitializeComponent();
         }
 
-        private void btnLogin_Clicked(object sender, EventArgs e)
+        private void btnLogin_ClickedAsync(object sender, EventArgs e)
         {
-            //Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Iniciando Session!", Acr.UserDialogs.MaskType.Black);
-            this.txtCedula.Text = "0011810860021C";
-            this.btnLogin.Text = ".........";
-            var Servicios = new Services.LoginServices();
-            Entidades.Respuesta Resultado;
-            Entidades.Auth usuario = new Entidades.Auth();
-
-
-            Resultado =  AsyncHelper.RunSync<Entidades.Respuesta>(()=> Servicios.LoginAsync(txtCedula.Text));
-
-            //var toast = new ShowToastPopUp();
-            if (Resultado.Objeto == null)
+            if (this.txtCedula.Text != "" || this.txtCedula.Text.Length > 0)
             {
-                if (Resultado.Response == "")
-                {
-                    DisplayAlert("LIP", " Error de Conexion", "Aceptar");
-                }
-                else
-                {
-                    if (Resultado.Response == "Este Usuario tiene session activa")
-                    {
-                        var bd = new DataAccess();
-                        usuario = bd.GetAllLevantado().FirstOrDefault();
-                       // Acr.UserDialogs.UserDialogs.Instance.HideLoading();
-                        if (usuario != null)
-                        {
+                Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Iniciando Session!", Acr.UserDialogs.MaskType.Clear);
+                Task.Run(() => this.IniciarSessionAsync());
+            }
+            else {
+                toast.ShowToastMessage("Escriba sus datos para iniciar Sessión!");
+                this.txtCedula.Focus();
+            }
+          
 
-                            var f = new MainPage();
-                            f.bEnSession = true;
-                            f.Usuario = usuario;
-                            f.CargarDatos();
-                            this.Navigation.PushAsync(f, true);
-                        }
+        }
+        private async Task IniciarSessionAsync() {
+            try
+            {
+
+                var Servicios = new Services.LoginServices();
+                Entidades.Respuesta Resultado;
+                Entidades.Auth usuario = new Entidades.Auth();
+
+
+                Resultado = await Servicios.LoginAsync(txtCedula.Text);
+
+
+                if (Resultado.Code == 1) //Repuesta desde Servidor
+                {
+
+                    if (Resultado.Objeto != null) {
+                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        usuario = JsonConvert.DeserializeObject<Entidades.Auth>(Resultado.Objeto.ToString());
+                        usuario.Conteo = usuario.Conteo - 1;
+                        var f = new MainPage();
+                        f.Usuario = usuario;
+
+                        f.Lista = Resultado.Lista;
+                        f.CargarDatos();
+
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("LIP", "Bienvenido :" + usuario.Nombre, "Aceptar");
+                            await this.Navigation.PushAsync(f, true);
+                        });
                     }
                     else
                     {
-                        DisplayAlert("LIP", Resultado.Response, "Aceptar");
-                        //Acr.UserDialogs.UserDialogs.Instance.HideLoading();
-                        this.txtCedula.Focus();
+                        if (Resultado.Response == "Este Usuario tiene session activa")
+                        {
+                            var bd = new DataAccess();
+                            var usu = new Entidades.Auth();
+                            usu = bd.GetAllLevantado(txtCedula.Text);
+
+                            
+                            if (usuario != null)
+                            {
+                                var f = new MainPage();
+                                f.bEnSession = true;
+                                f.Usuario = usuario;
+                                f.CargarDatos();
+
+                                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                                Device.BeginInvokeOnMainThread(async () =>
+                                {
+                                    await this.Navigation.PushAsync(f, true);
+                                });
+                            }
+                            else 
+                            {
+                                Session = false;
+                                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                                Device.BeginInvokeOnMainThread(async () =>
+                                {
+                                    await DisplayAlert("LIP", "Este Usuario Tienen una session Abierta en un dispositivo, favor cerrar la sesión", "Ok");
+                                    return;
+
+                                });
+                            }
+                        }
                     }
+                    
+                }
+                if (Resultado.Code == 4)//Encontrado en BD
+                {
+                    var f = new MainPage();
+                    f.bEnSession = true;
+                    f.Usuario = (Entidades.Auth)Resultado.Objeto;
+                    //f.CargarDatos();
 
+                    Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await this.Navigation.PushAsync(f, true);
+                    });
+                }
 
+                if (Resultado.Code == 3) //Error de Conexion BD
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("LIP", " Error de Conexion", "Aceptar");
+                        return;
+                    });
+                    Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                }
+                if (Resultado.Code == 0) //Error de Conexion Servidor
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("LIP",Resultado.Response , "Aceptar");
+                    Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                    return;
+                    });
                 }
 
             }
-            else
+            catch (Exception)
             {
-                usuario = JsonConvert.DeserializeObject<Entidades.Auth>(Resultado.Objeto.ToString());
-                // JObject rss = JObject.Parse(Resultado.Lista.ToString());
-
-
-                DisplayAlert("LIP", "Bienvenido :" + usuario.Nombre, "Aceptar");
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
-                var f = new MainPage();
-                f.Usuario = usuario;
-                f.Lista = Resultado.Lista;
-                f.CargarDatos();
-                this.Navigation.PushAsync(f, true);
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                   await  DisplayAlert("LIP", "Ocurrio un Error", "Ok");
+                    return;
+
+                });
+               
+               // throw;
             }
 
-
-            //toast.ShowToastMessage(Resultado.Nombre);
         }
     }
 }

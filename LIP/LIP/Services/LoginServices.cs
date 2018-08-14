@@ -17,16 +17,29 @@ namespace LIP.Services
 
             try
             {
-                Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/login/login", JsonConvert.SerializeObject(NoCedula));
-                Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
-                var user = new Entidades.Auth();
-                user = JsonConvert.DeserializeObject<Entidades.Auth>(Resp.Objeto.ToString());
-                if (Resp.Lista != null) {
+                Entidades.Auth usuario = new Entidades.Auth();
+                usuario = bd.GetAllLevantado(NoCedula);
+                if (usuario == null)
+                {
 
-                    bd.SaveLevantado(user);
+                    Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/login/login", JsonConvert.SerializeObject(NoCedula));
+                    Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
+                    var user = new Entidades.Auth();
+                    user = JsonConvert.DeserializeObject<Entidades.Auth>(Resp.Objeto.ToString());
+                    user.Cedula = NoCedula;
+
+                    if (Resp.Lista != null)
+                    {
+
+                        bd.SaveLevantado(user);
+                    }
+
                 }
-              
-
+                else
+                {
+                    Resp.Objeto = usuario;
+                    Resp.Code = 4; //Encontrado BD Local
+                }
                     return Resp;
             }
             catch (Exception)

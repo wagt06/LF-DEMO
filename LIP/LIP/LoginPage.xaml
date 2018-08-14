@@ -9,7 +9,7 @@
             <Label FontSize="25" Text="LIP" HorizontalOptions="CenterAndExpand" />
             <Label Text="Levantado de Inventario Paisas " HorizontalOptions="CenterAndExpand" />
             <Entry  x:Name="txtCedula" Margin="0,60,0,0" HorizontalTextAlignment="Center" Text="" Placeholder="Ingrese credenciales" BackgroundColor="White" TextColor="Gray"></Entry>
-            <Button TextColor="White" Clicked="btnLogin_Clicked" x:Name="btnLogin" BorderRadius="10" BackgroundColor="Green" Margin="0,20,0,0" Text="Iniciar Session "  WidthRequest="100" HeightRequest="60"></Button>
+            <Button TextColor="White" Clicked="btnLogin_ClickedAsync" x:Name="btnLogin" BorderRadius="10" BackgroundColor="Green" Margin="0,20,0,0" Text="Iniciar Session "  WidthRequest="100" HeightRequest="60"></Button>
             <Label   HorizontalTextAlignment="End" Text="Se me olvido la contraseña"></Label>
         </StackLayout>
     </ContentPage.Content>

@@ -21,9 +21,7 @@ namespace LIP.Services
 
                 if (Resp.Code == 1)
                 {
-                    var Usu = new Entidades.Auth();
-                    Usu = JsonConvert.DeserializeObject<Entidades.Auth>(Resp.Objeto.ToString());
-                    if (bd.EjecutarQueryScalar(String.Format("UPDATE Productos SET Conteo = {0}, Codigo_Ubicacion = {1} WHERE  Codigo_Usuario = {2}", Usu.Conteo, Usu.Codigo_Ubicacion,Usu.Codigo_Usuario)) == 1) {
+                    if (bd.EjecutarQueryScalar(String.Format("UPDATE Auth SET Conteo = {0}, Codigo_Ubicacion = {1},isCerrado = 0 WHERE  Codigo_Usuario = {2}", Usuario.Conteo, Usuario.Codigo_Ubicacion, Usuario.Codigo_Usuario)) == 1) {
                       
                     }
                 }
@@ -47,6 +45,29 @@ namespace LIP.Services
             try
             {
                 Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/Ubicaciones/ObtenerUbicacion", JsonConvert.SerializeObject(Usuario));
+                Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
+
+                return Resp;
+            }
+            catch (Exception)
+            {
+                return Resp;
+                throw;
+            }
+
+        }
+
+        //CerrarUbicacion
+        public Entidades.Respuesta CerrarUbicacion(Entidades.Auth Usuario)
+        {
+            string Respuesta;
+            Services.ServicesApi api = new ServicesApi();
+            Entidades.Respuesta Resp = new Entidades.Respuesta();
+            Entidades.Respuesta Resp2 = new Entidades.Respuesta();
+            DataAccess bd = new DataAccess();
+            try
+            {
+                Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/Ubicaciones/CerrarUbicacion", JsonConvert.SerializeObject(Usuario));
                 Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
 
                 return Resp;

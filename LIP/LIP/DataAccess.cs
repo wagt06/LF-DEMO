@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using SQLite;
 using Xamarin.Forms;
@@ -23,10 +24,15 @@ namespace LIP
             {
                 dbConn.CreateTable<Entidades.Auth>();
             }
+            if (!ExistObject("DetalleLevantadoTemp"))
+            {
+                dbConn.CreateTable<Entidades.DetalleLevantadoTemp>();
+            }
         }
         public List<Productos> GetAllProd()
         {
             return dbConn.Query<Productos>("Select * From [Productos]");
+          
         }
 
         public int EjecutarQueryScalar(string Query) {
@@ -35,7 +41,9 @@ namespace LIP
 
         public List<Productos> FindProductos(string busqueda)
         {
-            return dbConn.Query<Productos>("Select * From [Productos] Where UPPER(Nombre) LIKE '" + busqueda + "%'");
+            
+            var Parametro = busqueda.Replace(" ", "%");
+            return dbConn.Query<Productos>("Select * From [Productos] Where UPPER(Nombre) LIKE '%" + Parametro.ToUpper() + "'%");
         }
         public int SaveProd(Productos aProducto)
         {
@@ -2259,14 +2267,24 @@ namespace LIP
         }
 
 
-        public List<Entidades.Auth> GetAllLevantado()
+        public Entidades.Auth GetAllLevantado(string NumeroCedula)
         {
-            return dbConn.Query<Entidades.Auth>("Select * From [Auth]");
+            return dbConn.FindWithQuery<Entidades.Auth>("Select * From [Auth] Where Cedula = '" + NumeroCedula + "'" );
         }
         public int SaveLevantado(Entidades.Auth aLevantado)
         {
             return dbConn.Insert(aLevantado);
         }
+
+        public int UpdateLevantado(Entidades.Auth aLevantado)
+        {
+            return dbConn.Update(aLevantado);
+        }
+
+        public int CerrarEstante(Entidades.Auth Usuario) {
+            return dbConn.Update(Usuario);
+        }
+
         public Boolean ExistObject(string Table) {
             Boolean resp = new Boolean();
             try
@@ -2284,6 +2302,77 @@ namespace LIP
                 throw;
             }
 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Metodos para  ProductoDetalle"></param>
+        /// <returns></returns>
+        public List<Entidades.DetalleLevantadoTemp> BuscarProductoDetalle(Entidades.DetalleLevantadoTemp p) {
+            try
+            {
+
+                string Where;
+                Where = string.Format(" WHERE CodigoSucursal = {0} AND Codigo_Factura = '{1}'  " +
+                                      " AND Bodega = {2} AND Codigo_Ubicacion = {3} " +
+                                      " AND  Codigo_Producto = '{4}'  ", p.CodigoSucursal, p.Codigo_Factura, p.Bodega, p.Codigo_Ubicacion, p.Codigo_Producto);
+                return dbConn.Query<Entidades.DetalleLevantadoTemp>("SELECT * FROM DetalleLevantadoTemp " + Where );
+            }
+            catch (Exception)
+            {
+                return null;
+               // throw;
+            }
+
+        }
+
+        public int GuardarProductoDetalle(Entidades.DetalleLevantadoTemp ProductoDetalle) {
+            try
+            {
+                return dbConn.Insert(ProductoDetalle);
+            }
+            catch (Exception)
+            {
+                return 0;
+                //throw;
+            }
+         
+        }
+
+        public int ActualizarProductoDetalle(int Usuario, string CodProducto,string Factura , int Sucursal, int Estante, int Bodega, Double Cantidad, double Conteo) {
+            string Consulta;
+            Consulta = "";
+            string Where;
+            try
+            {
+                Where = string.Format(" WHERE CodigoSucursal = {0} AND Codigo_Factura = '{1}'  " +
+                                               " AND Bodega = {2} AND Codigo_Ubicacion = {3} " +
+                                               " AND  Codigo_Producto = '{4}'  ", Sucursal, Factura, Bodega, Estante, CodProducto);
+                if (Conteo == 0) {
+                    Consulta = string.Format("Update DetalleLevantadoTemp SET Cantidad = {0}, Codigo_Usuario  = {1} ", Cantidad, Usuario);
+                }
+
+                if (Conteo == 1)
+                {
+                    Consulta = string.Format("Update DetalleLevantadoTemp SET Conteo1 = {0}, UC1 = {1} ", Cantidad, Usuario);
+                }
+                if (Conteo == 2)
+                {
+                    Consulta = string.Format("Update DetalleLevantadoTemp SET Conte2 = {0}, UC2 = {1}", Cantidad, Usuario);
+                }
+                if (Conteo == 3)
+                {
+                    Consulta = string.Format("Update DetalleLevantadoTemp SET Conteo3 = {0}, UC3 = {1}", Cantidad, Usuario);
+                }
+                return dbConn.Execute(Consulta + Where);
+            }
+            catch (Exception)
+            {
+                return 0;
+                //throw;
+            }
+           
         }
 
     }

@@ -23,10 +23,14 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Conexion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccess.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DetalleConteoProductoPage.xaml.cs">
+      <DependentUpon>DetalleConteoProductoPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\Auth.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\Lista.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\ListModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entidades\Producto.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entidades\DetalleLevantadoTemp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\Respuesta.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IgresarProductosPage.xaml.cs">
       <DependentUpon>IgresarProductosPage.xaml</DependentUpon>
@@ -43,6 +47,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Productos.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EstantesServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LoginServices.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ProductosServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ServicesApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SqliteService .cs" />
   </ItemGroup>
@@ -60,6 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)DetalleConteoProductoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>

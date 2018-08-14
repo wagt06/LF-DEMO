@@ -18,7 +18,7 @@ namespace LIP.Services
             string sRespuesta ;
             sRespuesta = "Esta es la respuesta";
             var rxcui = "198440";
-            var request = HttpWebRequest.Create(string.Format(@"http://192.168.1.9/lip/api/login"));
+            var request = HttpWebRequest.Create(string.Format(@"http://192.168.1.9:45455/api/Productos/Guardar"));
             request.ContentType = "application/json";
             request.Method = "GET";
 
@@ -63,6 +63,7 @@ namespace LIP.Services
                 var request = HttpWebRequest.Create(string.Format(URL, rxcui));
                 request.ContentType = "application/json";
                 request.Method = "POST";
+                request.Timeout = 10000;
                 //request.ContentType = "Application/x-www-form-urlencoded";
                 using (System.IO.Stream s = request.GetRequestStream())
                 {
