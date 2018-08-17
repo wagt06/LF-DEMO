@@ -7,7 +7,7 @@ namespace LIP.Services
 {
    public  class ProductosServices
     {
-        public async System.Threading.Tasks.Task<Entidades.Respuesta> GuardarProducto(Entidades.DetalleLevantadoTemp Producto)
+        public Entidades.Respuesta GuardarProducto(Entidades.DetalleLevantadoTemp Producto)
         {
             string Respuesta;
             Services.ServicesApi api = new ServicesApi();
@@ -41,7 +41,7 @@ namespace LIP.Services
 
         }
 
-        public async System.Threading.Tasks.Task<Entidades.Respuesta> ActualizarProducto(Entidades.DetalleLevantadoTemp Producto)
+        public Entidades.Respuesta ActualizarProducto(Entidades.DetalleLevantadoTemp Producto)
         {
             string Respuesta;
             Services.ServicesApi api = new ServicesApi();
@@ -65,6 +65,28 @@ namespace LIP.Services
 
                     //}
                 }
+                return Resp;
+            }
+            catch (Exception)
+            {
+                return Resp;
+                throw;
+            }
+
+
+        }
+
+        public Entidades.Respuesta TraerDetalleEstantes(Entidades.DetalleLevantadoTemp Producto)
+        {
+            string Respuesta;
+            Services.ServicesApi api = new ServicesApi();
+            Entidades.Respuesta Resp = new Entidades.Respuesta();
+            DataAccess bd = new DataAccess();
+            try
+            {
+
+                Respuesta = api.PeticionPost("http://192.168.1.9/Lip/api/Productos/DetalleProducto", JsonConvert.SerializeObject(Producto));
+                Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);   
                 return Resp;
             }
             catch (Exception)

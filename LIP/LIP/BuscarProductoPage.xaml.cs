@@ -18,23 +18,19 @@ namespace LIP
         DataAccess db = new DataAccess();
         public Boolean isCerrardo = new Boolean();
         public Entidades.Auth Usuario = new Entidades.Auth();
+        Productos p = new Productos();
+        private  int tap;
 
-        TapGestureRecognizer g = new TapGestureRecognizer();
-
-       
-      
-    public BuscarProductoPage()
+        public BuscarProductoPage()
         {
             InitializeComponent();
             this.lvwProductos.ItemsSource = db.GetAllProd();
-            g.NumberOfTapsRequired = 2;
-            g.Tapped += (Sender,args) => GestureEnvento(Sender,args);
-            this.lvwProductos.GestureRecognizers.Add(g);
         }
 
         public void Load()
         {
             this.tbDatos.Text = "Conteo: " + Usuario.Conteo + " Estante : " + Usuario.Codigo_Ubicacion;
+            tap = 0;
         }
 
         private void Button_Clicked(object sender, EventArgs e)
@@ -80,36 +76,76 @@ namespace LIP
 
         private void lvwProductos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            //Productos p = new Productos();
-            //p = (Productos)e.SelectedItem;
-            //var f = new IgresarProductosPage();
-            //f.CodigoProducto = p.Codigo;
-            //f.NombreProducto = p.Nombre;
-            //f.Usuario = Usuario;
-            //f.Cargar();
-            //Navigation.PushAsync(f, true);
         }
 
         private void ViewCell_Tapped(object sender, EventArgs e)
         {
-            Productos p = new Productos();
+            Productos p2 = new Productos();
+            tap += 1;
+            p2 = p;
+           
             p = (Productos)this.lvwProductos.SelectedItem;
-            var f = new IgresarProductosPage();
-            f.CodigoProducto = p.Codigo;
-            f.NombreProducto = p.Nombre;
-            f.Usuario = Usuario;
-            f.Cargar();
-            Navigation.PushAsync(f, true);
+            if (p2 != p)
+            {
+                tap = 1;
+            }
+
+            if (tap == 2) {
+           
+                var f = new IgresarProductosPage();
+                f.CodigoProducto = p.Codigo;
+                f.NombreProducto = p.Nombre;
+                f.Usuario = Usuario;
+                f.Cargar();
+                Navigation.PushAsync(f, true);
+            }
+
+        }
+        private void ClickVerDetalle(object sender, EventArgs e) {
+            try
+            {
+                
+                var DetalleProducto = new DetalleConteoProductoPage();
+                p = (Productos)this.lvwProductos.SelectedItem;
+                if (p != null)
+                {
+                    Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Descargando Detalle", Acr.UserDialogs.MaskType.Clear);
+                    Device.BeginInvokeOnMainThread(async () =>
+                {
+                   
+                        DetalleProducto.Producto.CodigoSucursal = Usuario.Sucursal;
+                        DetalleProducto.Producto.Codigo_Factura = Usuario.Parcial;
+                        DetalleProducto.Producto.Bodega = Usuario.Bodega;
+                        DetalleProducto.Producto.Codigo_Producto = p.Codigo;
+                        DetalleProducto.Cargar();
+
+                        // Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        await Navigation.PushAsync(DetalleProducto, true);
+                    
+                });
+                }
+            }
+            catch (Exception)
+            {
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                DisplayAlert("LIP", "Seleccione un Producto", "OK");
+                return;
+               // throw;
+            }
+          
+           
         }
 
         private void lvwProductos_ItemTapped(object sender, ItemTappedEventArgs e)
         {
+
 
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            tap = 0;
             Entidades.Respuesta Respuesta = new Entidades.Respuesta();
             Usuario = db.GetAllLevantado(Usuario.Cedula);
             if  (Usuario.Codigo_Ubicacion == 0){
@@ -118,9 +154,6 @@ namespace LIP
 
         }
 
-        private void GestureEnvento(object sender, EventArgs e) {
-
-        }
-
+ 
     }
 }

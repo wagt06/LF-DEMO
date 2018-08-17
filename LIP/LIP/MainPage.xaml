@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:LIP"
              x:Class="LIP.MainPage"
              NavigationPage.HasBackButton="False"
+             BackgroundColor="LightGray"
             >
     <ContentPage.ToolbarItems  >
         <ToolbarItem Name="ActEstantes" Clicked="ActEstantes_Clicked" Text="Actualizar Estantes" Icon="" Priority="0"></ToolbarItem>
@@ -12,10 +13,10 @@
         <!-- Place new controls here -->
         
         
-        <StackLayout Padding="10,20,10,30" BackgroundColor="LightGray">
+        <StackLayout Padding="10,20,10,30" BackgroundColor="White">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -25,12 +26,12 @@
             </Grid>
             <Label FontAttributes="Bold" Grid.Row="0" Grid.Column="0" Text="Usuario: "/>
             <Label Grid.Row="0" Grid.Column="1"  x:Name="lblUsuario" />
-            <Label Grid.Row="1" Grid.Column="0" Text="Sucursal: "/>
-            <Label FontAttributes="Bold" Grid.Row="1" Grid.Column="1"  x:Name="lblSucursal" />
-            <Label Grid.Row="2" Grid.Column="0" Text="Bodega: "/>
-            <Label FontAttributes="Bold" Grid.Row="2" Grid.Column="1"  x:Name="lblBodega" />
-            <Label Grid.Row="3" Grid.Column="0" Text="Estante Actual: "/>
-            <Label FontAttributes="Bold" Grid.Row="3" Grid.Column="1"  x:Name="lblEstante" />
+            <Label FontAttributes="Bold"  Grid.Row="1" Grid.Column="0" Text="Sucursal: "/>
+            <Label Grid.Row="1" Grid.Column="1"  x:Name="lblSucursal" />
+            <Label FontAttributes="Bold" Grid.Row="2" Grid.Column="0" Text="Bodega: "/>
+            <Label Grid.Row="2" Grid.Column="1"  x:Name="lblBodega" />
+            <Label FontAttributes="Bold" Grid.Row="3" Grid.Column="0" Text="Estante Actual: "/>
+            <Label Grid.Row="3" Grid.Column="1"  x:Name="lblEstante" />
         </StackLayout>
 
         <Picker SelectedIndexChanged="Estantes_SelectedIndexChanged"
@@ -43,7 +44,7 @@
         </Picker>
 
         <StackLayout Margin="0,50,0,0">
-            <Button x:Name="btnContar" Text="Comenzar Levantado" HorizontalOptions="CenterAndExpand" BackgroundColor="DarkCyan" TextColor="WhiteSmoke" Clicked="Button_Clicked">
+            <Button x:Name="btnContar" Text="Comenzar Levantado" StyleClass="Primary"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Clicked="Button_Clicked">
             </Button>
         </StackLayout>
     </StackLayout>

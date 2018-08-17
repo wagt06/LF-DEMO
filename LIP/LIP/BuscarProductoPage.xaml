@@ -6,7 +6,7 @@
     <ContentPage.ToolbarItems  >
         <!--<ToolbarItem  x:Name="TbTitulo" Text="buscar Productos" ></ToolbarItem>-->
         <ToolbarItem  x:Name="tbDatos" Text="" ></ToolbarItem>
-        <ToolbarItem Name="" Icon="" Priority="0"></ToolbarItem>
+        <ToolbarItem Name="btnVerDetalle" Clicked="ClickVerDetalle" Icon="" Priority="0"></ToolbarItem>
     </ContentPage.ToolbarItems>
   
     <StackLayout Margin="10" Orientation="Vertical" >

@@ -18,7 +18,6 @@ namespace LIP
     {
         ShowToastPopUp toast = new ShowToastPopUp();
         Boolean Session = new Boolean();
-        CancellationTokenSource TokenSource = new CancellationTokenSource();
         public LoginPage()
         {
             InitializeComponent();
@@ -38,7 +37,7 @@ namespace LIP
           
 
         }
-        private async Task IniciarSessionAsync() {
+        private  void IniciarSessionAsync() {
             try
             {
 
@@ -47,24 +46,25 @@ namespace LIP
                 Entidades.Auth usuario = new Entidades.Auth();
 
 
-                Resultado = await Servicios.LoginAsync(txtCedula.Text);
+                Resultado = Servicios.LoginAsync(txtCedula.Text);
 
 
                 if (Resultado.Code == 1) //Repuesta desde Servidor
                 {
 
                     if (Resultado.Objeto != null) {
-                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                  
                         usuario = JsonConvert.DeserializeObject<Entidades.Auth>(Resultado.Objeto.ToString());
                         usuario.Conteo = usuario.Conteo - 1;
                         var f = new MainPage();
                         f.Usuario = usuario;
 
                         f.Lista = Resultado.Lista;
-                        f.CargarDatos();
+                       // f.CargarDatos();
 
                         Device.BeginInvokeOnMainThread(async () =>
                         {
+                           // Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                             await DisplayAlert("LIP", "Bienvenido :" + usuario.Nombre, "Aceptar");
                             await this.Navigation.PushAsync(f, true);
                         });
@@ -83,9 +83,9 @@ namespace LIP
                                 var f = new MainPage();
                                 f.bEnSession = true;
                                 f.Usuario = usuario;
-                                f.CargarDatos();
+                               // f.CargarDatos();
 
-                                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                               // Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                                 Device.BeginInvokeOnMainThread(async () =>
                                 {
                                     await this.Navigation.PushAsync(f, true);
@@ -113,7 +113,7 @@ namespace LIP
                     f.Usuario = (Entidades.Auth)Resultado.Objeto;
                     //f.CargarDatos();
 
-                    Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                    //Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                     Device.BeginInvokeOnMainThread(async () =>
                     {
                         await this.Navigation.PushAsync(f, true);

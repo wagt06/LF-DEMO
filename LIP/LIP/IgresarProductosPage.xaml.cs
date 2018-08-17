@@ -113,7 +113,7 @@ namespace LIP
                 try 
                 {
                    
-                    Resp = await Productos.GuardarProducto(pro);
+                    Resp =  Productos.GuardarProducto(pro);
                     if (Resp.Code == 3)
                     {
                         var producto = new Entidades.DetalleLevantadoTemp();
@@ -157,7 +157,7 @@ namespace LIP
                             pro.Conteo3 = monto;
                             pro.UC3 = Usuario.Codigo_Usuario;
                         }
-                        var R = await Productos.ActualizarProducto(pro);
+                        var R =  Productos.ActualizarProducto(pro);
                         Resp.Response = R.Response;
                         Resp.Code = R.Code;
                     }

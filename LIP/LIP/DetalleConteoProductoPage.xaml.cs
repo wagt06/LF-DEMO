@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,33 +14,61 @@ namespace LIP
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DetalleConteoProductoPage : ContentPage
     {
-        public ObservableCollection<string> Items { get; set; }
+        List<Entidades.DetalleEstante> Items = new List<Entidades.DetalleEstante>();
+        public Entidades.DetalleLevantadoTemp Producto = new Entidades.DetalleLevantadoTemp();
+         Services.ProductosServices Servicios = new Services.ProductosServices();
+        Entidades.Respuesta resp = new Entidades.Respuesta();
 
         public DetalleConteoProductoPage()
         {
             InitializeComponent();
+            this.Title = "Conteo por estantes";
+        }
 
-            Items = new ObservableCollection<string>
+        public void Cargar() {
+            try
             {
-                "Item 1",
-                "Item 2",
-                "Item 3",
-                "Item 4",
-                "Item 5"
-            };
-			
-			MyListView.ItemsSource = Items;
+                    resp = Servicios.TraerDetalleEstantes(Producto);
+                    if (resp.Code == 1)
+                    {
+                    if (resp.Lista.Count > 0)
+                    {
+
+                        foreach (object i in resp.Lista)
+                        {
+                            Items.Add(JsonConvert.DeserializeObject<Entidades.DetalleEstante>(i.ToString()));
+                        }
+                       
+                        this.MyListView.ItemsSource = Items;
+                        this.BindingContext = Items;
+                    }
+                    else {
+                        this.Title = "No hay conteo para este Producto! ";
+                       
+                    }
+                       
+                    }
+               
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+            }
+            catch (Exception)
+            {
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                return;
+               // throw;
+            }
+          
         }
 
         async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (e.Item == null)
-                return;
+            //if (e.Item == null)
+            //    return;
 
-            await DisplayAlert("Item Tapped", "An item was tapped.", "OK");
+            //await DisplayAlert("Item Tapped", "An item was tapped.", "OK");
 
-            //Deselect Item
-            ((ListView)sender).SelectedItem = null;
+            ////Deselect Item
+            //((ListView)sender).SelectedItem = null;
         }
     }
 }

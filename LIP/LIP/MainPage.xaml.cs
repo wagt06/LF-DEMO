@@ -165,8 +165,7 @@ namespace LIP
             else {
                 if (Respuesta.Code == 0)
                 {
-
-
+                   
                 }
                 else
                 {
@@ -184,15 +183,18 @@ namespace LIP
            
             try
             {
-                if (!this.VienededeLogin) //si viene desde el login no entra
-                {
-                    Entidades.Respuesta Respuesta = new Entidades.Respuesta();
-                    Usuario = bd.GetAllLevantado(Usuario.Cedula);
-                    if (Usuario.IsCerrado) {
-                        Usuario.Codigo_Ubicacion = 0;
+                    if (!this.VienededeLogin) //si viene desde el login no entra
+                    {
+
+                        Entidades.Respuesta Respuesta = new Entidades.Respuesta();
+                        Usuario = bd.GetAllLevantado(Usuario.Cedula);
+                        if (Usuario.IsCerrado)
+                        {
+                            Usuario.Codigo_Ubicacion = 0;
+                        }
+                         CargarDatos();
+                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                     }
-                    CargarDatos();
-                }
             }
             catch (Exception)
             {

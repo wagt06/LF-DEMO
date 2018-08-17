@@ -7,7 +7,7 @@ namespace LIP.Services
 {
     class LoginServices
     {
-        public async System.Threading.Tasks.Task<Entidades.Respuesta> LoginAsync(string NoCedula)
+        public Entidades.Respuesta LoginAsync(string NoCedula)
         {
             string Respuesta;
             Services.ServicesApi api = new ServicesApi();
@@ -22,7 +22,7 @@ namespace LIP.Services
                 if (usuario == null)
                 {
 
-                    Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/login/login", JsonConvert.SerializeObject(NoCedula));
+                    Respuesta =  api.PeticionPost("http://192.168.1.9/lip/api/login/login", JsonConvert.SerializeObject(NoCedula));
                     Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
                     var user = new Entidades.Auth();
                     user = JsonConvert.DeserializeObject<Entidades.Auth>(Resp.Objeto.ToString());
