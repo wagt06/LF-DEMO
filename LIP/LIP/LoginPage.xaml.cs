@@ -5,11 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Plugin.Toast;
 using Newtonsoft.Json;
+using Android.Net;
+
+using Android.App;
+using Android.Content;
+using Java.Net;
 
 namespace LIP
 {
@@ -25,10 +29,18 @@ namespace LIP
 
         private void btnLogin_ClickedAsync(object sender, EventArgs e)
         {
+            this.IsBusy = true;
+
+           if (!RevisarConexion()){
+                Acr.UserDialogs.UserDialogs.Instance.Toast("Active su WIFI! Boboso");
+                return;
+            }
+
             if (this.txtCedula.Text != "" || this.txtCedula.Text.Length > 0)
             {
                 Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Iniciando Session!", Acr.UserDialogs.MaskType.Clear);
-                Task.Run(() => this.IniciarSessionAsync());
+                Task.Run(() => this.IniciarSessionAsync()
+                );
             }
             else {
                 toast.ShowToastMessage("Escriba sus datos para iniciar Sessión!");
@@ -37,6 +49,14 @@ namespace LIP
           
 
         }
+        private Boolean RevisarConexion() {
+
+            ConnectivityManager connectivityManager = (ConnectivityManager)Android.App.Application.Context.GetSystemService(Context.ConnectivityService);
+            NetworkInfo activeConnection = connectivityManager.ActiveNetworkInfo;
+            return (activeConnection != null) && activeConnection.IsConnected;
+
+        }
+
         private  void IniciarSessionAsync() {
             try
             {
@@ -46,7 +66,7 @@ namespace LIP
                 Entidades.Auth usuario = new Entidades.Auth();
 
 
-                Resultado = Servicios.LoginAsync(txtCedula.Text);
+                Resultado = Servicios.LoginAsync(txtCedula.Text.ToUpper());
 
 
                 if (Resultado.Code == 1) //Repuesta desde Servidor
@@ -57,14 +77,17 @@ namespace LIP
                         usuario = JsonConvert.DeserializeObject<Entidades.Auth>(Resultado.Objeto.ToString());
                         usuario.Conteo = usuario.Conteo - 1;
                         var f = new MainPage();
+                        usuario.Cedula = this.txtCedula.Text;
                         f.Usuario = usuario;
+                       
+                        f.VienededeLogin = true;
 
                         f.Lista = Resultado.Lista;
-                       // f.CargarDatos();
+                        f.CargarDatos();
 
                         Device.BeginInvokeOnMainThread(async () =>
                         {
-                           // Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                            Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                             await DisplayAlert("LIP", "Bienvenido :" + usuario.Nombre, "Aceptar");
                             await this.Navigation.PushAsync(f, true);
                         });
@@ -83,9 +106,10 @@ namespace LIP
                                 var f = new MainPage();
                                 f.bEnSession = true;
                                 f.Usuario = usuario;
-                               // f.CargarDatos();
+                                f.VienededeLogin = true;
+                                 f.CargarDatos();
 
-                               // Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                                 Device.BeginInvokeOnMainThread(async () =>
                                 {
                                     await this.Navigation.PushAsync(f, true);
@@ -111,9 +135,11 @@ namespace LIP
                     var f = new MainPage();
                     f.bEnSession = true;
                     f.Usuario = (Entidades.Auth)Resultado.Objeto;
-                    //f.CargarDatos();
+                    f.VienededeLogin = true;
+                   
+                    f.CargarDatos();
 
-                    //Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                    Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                     Device.BeginInvokeOnMainThread(async () =>
                     {
                         await this.Navigation.PushAsync(f, true);
@@ -133,13 +159,14 @@ namespace LIP
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("LIP",Resultado.Response , "Aceptar");
+                        await DisplayAlert("LIP",Resultado.Response != "" ? Resultado.Response : "Ocurrio un error de Conexion con el Servidor", "Aceptar");
                     Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                     return;
                     });
                 }
-
+                this.IsBusy = false;
             }
+
             catch (Exception)
             {
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();

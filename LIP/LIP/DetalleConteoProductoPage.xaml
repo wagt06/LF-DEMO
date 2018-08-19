@@ -15,6 +15,11 @@
                 <Label Text="Cantidad" FontSize="Large"  TextColor="White" FontAttributes="Bold"/>
             </StackLayout>
         </ListView.Header>
+        <ListView.Footer>
+            <StackLayout>
+                <Label x:Name="lblFooter"></Label>
+            </StackLayout>
+        </ListView.Footer>
 
         <ListView.ItemTemplate >
             <DataTemplate >

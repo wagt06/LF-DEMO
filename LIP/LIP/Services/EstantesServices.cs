@@ -15,7 +15,7 @@ namespace LIP.Services
             DataAccess bd = new DataAccess();
             try
             {
-                Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/Ubicaciones/Ubicacion", JsonConvert.SerializeObject(Usuario));
+                Respuesta = api.PeticionPost("/lip/api/Ubicaciones/Ubicacion", JsonConvert.SerializeObject(Usuario));
                 Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
 
 
@@ -30,7 +30,7 @@ namespace LIP.Services
             catch (Exception)
             {
                 return Resp;
-                throw;
+                //throw;
             }
 
         }
@@ -44,7 +44,7 @@ namespace LIP.Services
             DataAccess bd = new DataAccess();
             try
             {
-                Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/Ubicaciones/ObtenerUbicacion", JsonConvert.SerializeObject(Usuario));
+                Respuesta = api.PeticionPost("/lip/api/Ubicaciones/ObtenerUbicacion", JsonConvert.SerializeObject(Usuario));
                 Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
 
                 return Resp;
@@ -67,7 +67,7 @@ namespace LIP.Services
             DataAccess bd = new DataAccess();
             try
             {
-                Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/Ubicaciones/CerrarUbicacion", JsonConvert.SerializeObject(Usuario));
+                Respuesta = api.PeticionPost("/lip/api/Ubicaciones/CerrarUbicacion", JsonConvert.SerializeObject(Usuario));
                 Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
 
                 return Resp;
@@ -89,7 +89,7 @@ namespace LIP.Services
             DataAccess bd = new DataAccess();
             try
             {
-                Respuesta = api.PeticionPost("http://192.168.1.9/lip/api/login/Conteo", JsonConvert.SerializeObject(Usuario));
+                Respuesta = api.PeticionPost("/lip/api/login/Conteo", JsonConvert.SerializeObject(Usuario));
 
                 return JsonConvert.DeserializeObject<string>(Respuesta);
 

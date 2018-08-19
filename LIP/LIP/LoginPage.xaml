@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="LIP.LoginPage">
+             x:Class="LIP.LoginPage"
+             >
     <ContentPage.Content >
         <StackLayout Padding="10" Margin="0,60,0,0">
             <!--<Image  WidthRequest="100" Source="Cuaderno.jpg"></Image>-->
-            <Image HeightRequest="100" WidthRequest="100" Source="Cuaderno.jpg"></Image>
+            <Image HeightRequest="100" WidthRequest="100" Source="IconApp.jpg"></Image>
             <Label FontSize="25" Text="LIP" HorizontalOptions="CenterAndExpand" />
             <Label Text="Levantado de Inventario Paisas " HorizontalOptions="CenterAndExpand" />
             <Entry  x:Name="txtCedula" Margin="0,60,0,0" HorizontalTextAlignment="Center" Text="" Placeholder="Ingrese credenciales" BackgroundColor="White" TextColor="Gray"></Entry>

@@ -29,6 +29,7 @@ namespace LIP.Entidades
         public double Resultado { get; set; }
         public int Tipo_Origen { get; set; }
         public string Codigo_Barra { get; set; }
+        public int Orden { get; set; }
     }
 }
 

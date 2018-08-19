@@ -6,34 +6,42 @@
     <ContentPage.ToolbarItems  >
         <!--<ToolbarItem  x:Name="TbTitulo" Text="buscar Productos" ></ToolbarItem>-->
         <ToolbarItem  x:Name="tbDatos" Text="" ></ToolbarItem>
-        <ToolbarItem Name="btnVerDetalle" Clicked="ClickVerDetalle" Icon="" Priority="0"></ToolbarItem>
+        <ToolbarItem   Name="btnVerDetalle" Clicked="ClickVerDetalle" Icon="outline_assignment_24.xml" Priority="0">
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
-  
-    <StackLayout Margin="10" Orientation="Vertical" >
-        <Entry Placeholder="Buscar Producto" TextChanged="Entry_TextChanged" HorizontalTextAlignment="Center"></Entry>
-        <ListView  IsPullToRefreshEnabled="False"   x:Name="lvwProductos" ItemSelected="lvwProductos_ItemSelected" ItemTapped="lvwProductos_ItemTapped"  >
+    <StackLayout Margin="5" Orientation="Vertical" >
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <Button Text="Inventario"  HorizontalOptions="CenterAndExpand"  x:Name="btnInventario" Clicked="btnInventario_Clicked"></Button>
+            <Button Text="Contados"  HorizontalOptions="CenterAndExpand" x:Name="btnContados" Clicked="btnContados_Clicked"></Button>
+            <Button Text="Diferencias" HorizontalOptions="CenterAndExpand" x:Name="btnDiferencias" Clicked="btnDiferencias_Clicked" ></Button>
+        </StackLayout>
+        <StackLayout>
+            <SearchBar HeightRequest="40.0" Placeholder="Buscar Productos" PlaceholderColor="LightGray" x:Name="btnBusqueda" TextChanged="Entry_TextChanged" ></SearchBar>
+        </StackLayout>
+        <!--<Entry Placeholder="Buscar Producto" TextChanged="Entry_TextChanged" HorizontalTextAlignment="Center"></Entry>-->
+        <ListView  IsPullToRefreshEnabled="False"   x:Name="lvwProductos" ItemSelected="lvwProductos_ItemSelected" ItemTapped="lvwProductos_ItemTapped" >
             <ListView.ItemTemplate>
                 <DataTemplate >
-                    <ViewCell Tapped="ViewCell_Tapped">
+                    <ViewCell Tapped="ViewCell_Tapped" >
                         <StackLayout Orientation="Vertical">
                             <StackLayout Orientation="Horizontal">
-
                                 <Image WidthRequest="40" Source="Producto.png"/>
-                                     <StackLayout Orientation="Vertical">
-                                        <Label Text="{Binding Codigo}"
-                                            TextColor="#f35e20" />
-                                        <Label Text="{Binding Nombre}"
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Codigo}"
+                                            TextColor="#f35e20"  FontSize="Micro" />
+                                    <Label Text="{Binding Nombre}"
                                             HorizontalOptions="FillAndExpand"
-                                            TextColor="#503026" />
+                                            TextColor="#503026" FontSize="Small" />
                                 </StackLayout>
+                                <Label Text="{Binding Resultado}"/>
                             </StackLayout>
                         </StackLayout>
                     </ViewCell>
-                            <!--<TextCell TextColor="Black"  Text="{Binding Nombre}" Detail="{Binding Codigo}"></TextCell>-->
+                    <!--<TextCell TextColor="Black"  Text="{Binding Nombre}" Detail="{Binding Codigo}"></TextCell>-->
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button class="warning" Text="Cerrar Estante" Clicked="Button_Clicked"></Button>
+        <Button Text="Cerrar Estante" Clicked="Button_Clicked" Image="outline_lock_black_18dp.png" StyleClass="Danger"></Button>
     </StackLayout>
  
 </ContentPage>

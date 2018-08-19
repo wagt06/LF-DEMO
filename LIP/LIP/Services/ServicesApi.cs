@@ -10,7 +10,7 @@ namespace LIP.Services
 {
     class ServicesApi
     {
-
+        public string URL_API;
         public string PeticionGet(string URL)
         {
             try
@@ -18,7 +18,7 @@ namespace LIP.Services
             string sRespuesta ;
             sRespuesta = "Esta es la respuesta";
             var rxcui = "198440";
-            var request = HttpWebRequest.Create(string.Format(@"http://192.168.1.9:45455/api/Productos/Guardar"));
+            var request = HttpWebRequest.Create(string.Format(@"http://"+ URL_API + "/api/Productos/Guardar"));
             request.ContentType = "application/json";
             request.Method = "GET";
 
@@ -50,17 +50,17 @@ namespace LIP.Services
             }
         }
 
-        public string PeticionPost(string URL, string Values)
+        public string PeticionPost(string Controlador, string Values)
         {
             try
             {
-
+                URL_API = "192.168.1.9";
                 string content;
                 HttpWebResponse Respuesta;
 
 
                 var rxcui = "198440";
-                var request = HttpWebRequest.Create(string.Format(URL, rxcui));
+                var request = HttpWebRequest.Create(string.Format("http://"+ URL_API + Controlador, rxcui));
                 request.ContentType = "application/json";
                 request.Method = "POST";
                 request.Timeout = 10000;
@@ -70,7 +70,6 @@ namespace LIP.Services
                     using (System.IO.StreamWriter sw = new System.IO.StreamWriter(s))
                         sw.Write(Values);
                 }
-                //using (HttpWebResponse response = (request.AsyncState as HttpWebRequest).EndGetResponse(request) as HttpWebResponse)
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
 
                 {

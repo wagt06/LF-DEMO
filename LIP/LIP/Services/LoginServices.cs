@@ -19,10 +19,11 @@ namespace LIP.Services
             {
                 Entidades.Auth usuario = new Entidades.Auth();
                 usuario = bd.GetAllLevantado(NoCedula);
+
                 if (usuario == null)
                 {
 
-                    Respuesta =  api.PeticionPost("http://192.168.1.9/lip/api/login/login", JsonConvert.SerializeObject(NoCedula));
+                    Respuesta =  api.PeticionPost("/lip/api/login/login", JsonConvert.SerializeObject(NoCedula));
                     Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
                     var user = new Entidades.Auth();
                     user = JsonConvert.DeserializeObject<Entidades.Auth>(Resp.Objeto.ToString());
@@ -30,8 +31,13 @@ namespace LIP.Services
 
                     if (Resp.Lista != null)
                     {
-
+                       
+                        user.Conteo =  user.Conteo > 0 ? user.Conteo - 1: user.Conteo;
                         bd.SaveLevantado(user);
+                    }
+                    else {
+                        Resp.Code = 0;
+                        Resp.Response = " Error al Conectar con el SERVER";
                     }
 
                 }

@@ -19,11 +19,7 @@ namespace LIP
         [PrimaryKey]
         public string Codigo { get; set; }
         public string Nombre { get; set; }
-        public int CodSucursal { get; set; }
-        public int CodBodega { get; set; }
-        public Single Conteo1 { get; set; }
-        public Single Conteo2 { get; set; }
-        public Single Conteo3 { get; set; }
-        public Single Conteo4 { get; set; }
+        public double Resultado { get; set; }
+        public string Estado { get; set; }
     }
 }

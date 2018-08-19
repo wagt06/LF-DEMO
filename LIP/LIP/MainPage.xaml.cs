@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Plugin.Toast;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,10 +18,11 @@ namespace LIP
         public Entidades.Auth Usuario = new Entidades.Auth();
         public List<object>  Lista = new List<object>();
         public Boolean bEnSession = new Boolean();
-        public List<Entidades.Lista> l = new List<Entidades.Lista>();
+        public ObservableCollection<Entidades.Lista> l = new ObservableCollection<Entidades.Lista>();
         Services.EstantesServices Servicio = new Services.EstantesServices();
         Boolean EstanteActivo = new Boolean();
-        Boolean VienededeLogin = new Boolean();
+        Boolean cargarCombo = new Boolean();
+        public  Boolean VienededeLogin = new Boolean();
         ShowToastPopUp t = new ShowToastPopUp();
         DataAccess bd = new DataAccess();
 
@@ -34,7 +36,7 @@ namespace LIP
         public void CargarDatos() {
             try
             {
-                
+                    cargarCombo = true;
                     Entidades.Auth item = new Entidades.Auth();
                     Entidades.Respuesta Respuesta = new Entidades.Respuesta();
                     BuscarProductoPage f = new BuscarProductoPage();
@@ -58,12 +60,13 @@ namespace LIP
                                 Lista = Respuesta.Lista;
                                 Usuario.Conteo = (int.Parse(Conteo)) - 1;
                                 Usuario.Codigo_Ubicacion = 0;
-                                bd.EjecutarQueryScalar(string.Format("UPDATE Usuario SET  Conteo={0}, isCerrado= 0  WHERE Codigo_Usuario ={1}", (int.Parse(Conteo) - 1), Usuario.Codigo_Usuario));
+                                bd.EjecutarQueryScalar(string.Format("UPDATE Auth SET  Conteo={0}, isCerrado= 0 ,Codigo_Ubicacion = {2} WHERE Codigo_Usuario ={1}", (int.Parse(Conteo) - 1), Usuario.Codigo_Usuario,Usuario.Codigo_Ubicacion));
                     }
 
-                l.Clear();
-               // this.Estantes.ItemsSource = null;
-                this.BindingContext = null;
+
+                    l.Clear();
+                //this.Estantes.ItemsSource = null;
+                // this.BindingContext = null;
                 //if (this.Estantes.Items.Count > 0) {
                 //    this.Estantes.Items.Clear();
                 //}
@@ -74,8 +77,9 @@ namespace LIP
                 }
                 
                 this.BindingContext = l;
-
                 this.Estantes.ItemsSource = l;
+
+
                 this.lblBodega.Text = Usuario.Bodega.ToString();
                 this.lblSucursal.Text = Usuario.Sucursal.ToString();
                 this.lblUsuario.Text = Usuario.Nombre;
@@ -104,13 +108,21 @@ namespace LIP
                     this.btnContar.Text = "Iniciar Conteo";
                     this.lblEstante.Text = "Estante No Seleccionado";
                 }
-
+                cargarCombo = false;
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+    
             }
             catch (Exception)
             {
 
-                // throw;
-                DisplayAlert("LIP", " Error de Conexion", "Aceptar");
+                // throw;.
+                cargarCombo = false;
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                 await   DisplayAlert("LIP", " Error de Conexion", "Aceptar");
+                });
+       
                 return;
             }
           
@@ -127,6 +139,7 @@ namespace LIP
 
         private void Button_Clicked(object sender, EventArgs e)
         {
+            this.VienededeLogin = false;
             BuscarProductoPage f = new BuscarProductoPage();
             f.Usuario = Usuario;
             f.Load();
@@ -144,8 +157,10 @@ namespace LIP
 
         private void Estantes_SelectedIndexChanged(object sender, EventArgs e)
         {
-           
 
+            if (cargarCombo) {
+                return;
+            }
             Entidades.Auth item = new Entidades.Auth();
             Entidades.Respuesta Respuesta = new Entidades.Respuesta();
             var r = (Entidades.Lista)this.Estantes.SelectedItem;
@@ -157,21 +172,14 @@ namespace LIP
             Respuesta = Servicio.SeleccionarEstantes(item);
             if (Respuesta.Code == 1)
             {
+                this.VienededeLogin = false;
                 BuscarProductoPage f = new BuscarProductoPage();
                 f.Usuario = item;
                 f.Load();
                 this.Navigation.PushAsync(f, true);
             }
             else {
-                if (Respuesta.Code == 0)
-                {
-                   
-                }
-                else
-                {
-                    //var t = new ShowToastPopUp();
-                    //t.ShowToastMessage("Error de Conexion");
-                }
+                DisplayAlert("LIP", "Ocurrio al seleccionar el estante, Intentelo de nuevo", "Aceptar");
             }
 
             }
@@ -183,29 +191,38 @@ namespace LIP
            
             try
             {
-                    if (!this.VienededeLogin) //si viene desde el login no entra
+                if (!this.VienededeLogin) {
+                    Entidades.Respuesta Respuesta = new Entidades.Respuesta();
+                    Usuario = bd.GetAllLevantado(Usuario.Cedula);
+                    if (Usuario.IsCerrado)
                     {
-
-                        Entidades.Respuesta Respuesta = new Entidades.Respuesta();
-                        Usuario = bd.GetAllLevantado(Usuario.Cedula);
-                        if (Usuario.IsCerrado)
-                        {
-                            Usuario.Codigo_Ubicacion = 0;
-                        }
-                         CargarDatos();
-                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        Usuario.Codigo_Ubicacion = 0;
                     }
+                    CargarDatos();
+                } 
+
             }
             catch (Exception)
             {
-                DisplayAlert("LIP", " Error de Conexion", "Aceptar");
-                throw;
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                DisplayAlert("LIP", "Ocurrio Un error al Recuperar Datos Db Local", "Aceptar");
+                return;
+                //throw;
             }
         }
 
         private void ActEstantes_Clicked(object sender, EventArgs e)
         {
-            CargarDatos();
+            Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Cargando estantes");
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Entidades.Respuesta Respuesta = new Entidades.Respuesta();
+                Usuario = bd.GetAllLevantado(Usuario.Cedula);
+                CargarDatos();
+    
+                Acr.UserDialogs.UserDialogs.Instance.Toast("Se actualizaron los estantes");
+            });
+ 
         }
     }
     }

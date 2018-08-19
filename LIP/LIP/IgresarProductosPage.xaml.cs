@@ -17,12 +17,17 @@ namespace LIP
         DataAccess db = new DataAccess();
         public string CodigoProducto;
         public string NombreProducto;
+        public Boolean ProductosDiferencias = new Boolean();
 
         public IgresarProductosPage ()
 		{
 			InitializeComponent ();
+            this.imgScanner.GestureRecognizers.Add(new TapGestureRecognizer { Command = new Command (() => { TapImgScannerAsync(); }), NumberOfTapsRequired = 1 });
+            
+      
          
 		}
+
         public void Cargar() {
             this.btnCodigo.Text = CodigoProducto; 
             this.lblNombre.Text = NombreProducto;
@@ -32,25 +37,28 @@ namespace LIP
         async void btnEscanear_Clicked(object sender, EventArgs e)
         {
             var scann = new ZXingBarcodeImageView();
-            var pagina = new ZXingScannerPage();
-            pagina.AutoFocus();
-            pagina.HasTorch = true;
-            pagina.Title = "Escaneando codigo de barra";
-
             //setup options
             var options = new ZXing.Mobile.MobileBarcodeScanningOptions
             {
                 AutoRotate = false,
-                UseFrontCameraIfAvailable = true,
+                UseFrontCameraIfAvailable = false,
                 TryHarder = true,
-                PossibleFormats = new List<ZXing.BarcodeFormat>
-                        {
-                           ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.EAN_13
-                        }
+                UseNativeScanning = true,
+                //PossibleFormats = new List<ZXing.BarcodeFormat>
+                //        {
+                //            ZXing.BarcodeFormat.CODABAR,
+                //           ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.EAN_13
+                //        }
                 };
 
-             var opciones = new ZXingScannerPage(options);  
-            
+
+
+            var pagina = new ZXingScannerPage();
+            pagina.AutoFocus();
+            //pagina.ToggleTorch();
+            //pagina.IsTorchOn = true;
+            //pagina.DefaultOverlayShowFlashButton = true; 
+            pagina.Title = "Escaneando codigo de barra";
 
             await Navigation.PushAsync(pagina);
 
@@ -72,6 +80,12 @@ namespace LIP
                 var pro = new Entidades.DetalleLevantadoTemp();
                 var Resp = new Entidades.Respuesta();
                 Services.ProductosServices Productos = new Services.ProductosServices();
+
+            if (string.IsNullOrEmpty(this.txtCantidad.Text))
+            {
+               Acr.UserDialogs.UserDialogs.Instance.Toast("Ingrese una cantidad! ");
+                return;
+            }
                 pro.Codigo_Usuario = Usuario.Codigo_Usuario;
                 pro.CodigoSucursal = Usuario.Sucursal;
                 pro.Codigo_Ubicacion = Usuario.Codigo_Ubicacion;
@@ -112,8 +126,23 @@ namespace LIP
                 var monto = new Double();
                 try 
                 {
+                    //g = Guar
+                   var g = await DisplayAlert(@"LIP Guardar Producto ", " Producto: " + this.NombreProducto + "\n\r"
+                                                                 + " Cantidad :" + this.txtCantidad.Text +"\n\r" 
+                                                                 , "Cancelar", "Guardar");
+                    //su guardar es cancelado
+                    if (g) {
+                        return;
+                    }
+
+                    if (!ProductosDiferencias)
+                    {
+                        Resp = Productos.GuardarProducto(pro);
+                    }
+                    else {
+                        Resp = Productos.ActualizarProducto(pro);
+                    }
                    
-                    Resp =  Productos.GuardarProducto(pro);
                     if (Resp.Code == 3)
                     {
                         var producto = new Entidades.DetalleLevantadoTemp();
@@ -197,6 +226,10 @@ namespace LIP
                         db.UpdateLevantado(Usuario);
                         await Navigation.PopAsync();
                     }
+                    if (Resp.Code == 0)
+                    {
+                        await DisplayAlert("LIP", Resp.Response, "Aceptar");
+                    }
 
 
                     if (Resp.Response == null) {
@@ -220,5 +253,10 @@ namespace LIP
         }
 
 
+        private void TapImgScannerAsync() {
+
+             this.btnEscanear_Clicked(null, null);  
+            //Acr.UserDialogs.UserDialogs.Instance.Toast("Me distes Click");
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace LIP.Services
             try
             {
               
-                Respuesta = api.PeticionPost("http://192.168.1.9/Lip/api/Productos/Guardar", JsonConvert.SerializeObject(Producto));
+                Respuesta = api.PeticionPost("/Lip/api/Productos/Guardar", JsonConvert.SerializeObject(Producto));
                 Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
 
 
@@ -51,7 +51,7 @@ namespace LIP.Services
             try
             {
 
-                Respuesta = api.PeticionPost("http://192.168.1.9/Lip/api/Productos/Actualizar", JsonConvert.SerializeObject(Producto));
+                Respuesta = api.PeticionPost("/Lip/api/Productos/Actualizar", JsonConvert.SerializeObject(Producto));
                 Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
 
 
@@ -85,8 +85,29 @@ namespace LIP.Services
             try
             {
 
-                Respuesta = api.PeticionPost("http://192.168.1.9/Lip/api/Productos/DetalleProducto", JsonConvert.SerializeObject(Producto));
+                Respuesta = api.PeticionPost("/Lip/api/Productos/DetalleProducto", JsonConvert.SerializeObject(Producto));
                 Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);   
+                return Resp;
+            }
+            catch (Exception)
+            {
+                return Resp;
+                throw;
+            }
+
+        }
+
+        public Entidades.Respuesta TraerListaProductosContados(Entidades.Auth Usuario)
+        {
+            string Respuesta;
+            Services.ServicesApi api = new ServicesApi();
+            Entidades.Respuesta Resp = new Entidades.Respuesta();
+            DataAccess bd = new DataAccess();
+            try
+            {
+
+                Respuesta = api.PeticionPost("/Lip/api/Productos/UbicacionProducto", JsonConvert.SerializeObject(Usuario));
+                Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
                 return Resp;
             }
             catch (Exception)

@@ -41,6 +41,7 @@ namespace LIP
                        
                         this.MyListView.ItemsSource = Items;
                         this.BindingContext = Items;
+                        
                     }
                     else {
                         this.Title = "No hay conteo para este Producto! ";

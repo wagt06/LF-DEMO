@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\Auth.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\DetalleEstante.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\Lista.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entidades\ListaProductos.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\ListModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\DetalleLevantadoTemp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\Respuesta.cs" />
