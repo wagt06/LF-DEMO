@@ -39,7 +39,12 @@ namespace LIP
             this.tbDatos.Text = "Conteo: " + Usuario.Conteo;
               //  + " Estante : " + Usuario.Codigo_Ubicacion;
             tap = 0;
-                this.btnDiferencias.IsVisible = Usuario.Conteo > 0 ? true:false;
+            this.btnDiferencias.IsVisible = Usuario.Conteo > 0 ? true:false;
+            var sizeBtn = (App.Current.MainPage.Width / 3)-5;
+            btnInventario.WidthRequest = sizeBtn;
+            btnContados.WidthRequest = sizeBtn;
+            btnDiferencias.WidthRequest = sizeBtn;
+            btnInventario_Clicked(null,null);
         }
 
         private void Button_Clicked(object sender, EventArgs e)
@@ -48,6 +53,11 @@ namespace LIP
 
             Device.BeginInvokeOnMainThread(async () =>
             {
+                if (this.listDiferencias.Count != 0 && Usuario.Conteo > 0 ) {
+                    await DisplayAlert("Cerrar Estantes", "No se puede cerrar el estante hasta nque todos los productos con diferencias esten contados, la lista debe de estar limpia.", "Ok");
+                    return;
+                }
+
                 var respuesta = await DisplayAlert("Cerrar Estantes", "Seguro que desea Cerrar el Estante Actual", "Aceptar", "Cancelar");
                 if (respuesta == true)
                 {
@@ -112,7 +122,9 @@ namespace LIP
                         if (this.buttonSelect == 3)
                         {
                             if (listDiferencias.Count <= 0) {
-                                listDiferencias = Lista.Where(x => x.Estado == "0").ToList();
+                                if (Usuario.Conteo == 1) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo1 == 0).ToList(); }
+                                if (Usuario.Conteo == 2) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo2 == 0).ToList(); }
+                                if (Usuario.Conteo == 3) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo3 == 0).ToList(); }
                             }
                             this.lvwProductos.ItemsSource = listDiferencias; 
                         }
@@ -158,7 +170,10 @@ namespace LIP
                     this.lvwProductos.ItemsSource = result;
                 }
                 if (this.buttonSelect == 3) {
+
                     var result = listDiferencias.Where(c => c.Nombre.ToUpper().Contains(e.NewTextValue.ToString().ToUpper()));
+
+
                     if (string.IsNullOrEmpty(e.NewTextValue)){
                         this.lvwProductos.ItemsSource = listDiferencias;
                     }
@@ -178,10 +193,7 @@ namespace LIP
             }
         }
 
-        private void lvwProductos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-        }
-
+    
         private void ViewCell_Tapped(object sender, EventArgs e)
         {
             Productos p2 = new Productos();
@@ -263,6 +275,7 @@ namespace LIP
                     if (listDiferencias.Count > 0) {
                         listDiferencias.Remove(p); //eliminamos de la lista de Conteo con dif.
                         if (buttonSelect != 1) {
+                            this.lvwProductos.ItemsSource = new List<Productos>();
                             this.lvwProductos.ItemsSource = listDiferencias;
                         }
                     }
@@ -283,6 +296,10 @@ namespace LIP
         private void btnDiferencias_Clicked(object sender, EventArgs e)
         {
             buttonSelect = 3;
+            var colorDefecto = btnDiferencias.BackgroundColor;
+            btnDiferencias.BackgroundColor = Color.DarkRed;
+            btnContados.BackgroundColor = colorDefecto;
+            btnInventario.BackgroundColor = colorDefecto;
             CargarProductosContados();
         }
     
@@ -290,12 +307,20 @@ namespace LIP
         private void btnContados_Clicked(object sender, EventArgs e)
         {
             buttonSelect = 2;
+            var colorDefecto = btnContados.BackgroundColor;
+            btnContados.BackgroundColor = Color.DarkRed;
+            btnDiferencias.BackgroundColor = colorDefecto;
+            btnInventario.BackgroundColor = colorDefecto;
             CargarProductosContados();    
         }
 
         private void btnInventario_Clicked(object sender, EventArgs e)
         {
             buttonSelect = 1;
+            var colorDefecto = btnInventario.BackgroundColor;
+            btnInventario.BackgroundColor = Color.DarkRed;
+            btnDiferencias.BackgroundColor = colorDefecto;
+            btnContados.BackgroundColor = colorDefecto;
             this.lvwProductos.ItemsSource = db.GetAllProd();
         }
     }

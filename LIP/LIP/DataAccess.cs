@@ -5457,6 +5457,9 @@ namespace LIP
         {
             return dbConn.FindWithQuery<Entidades.Auth>("Select * From [Auth] Where Cedula = '" + NumeroCedula + "'" );
         }
+        public int DeleteUser(Entidades.Auth Usuario) {
+            return dbConn.Delete(Usuario);
+        }
 
         public int SaveLevantado(Entidades.Auth aLevantado)
         {

@@ -55,5 +55,43 @@ namespace LIP.Services
             }
 
         }
+
+
+        public Entidades.Respuesta CerrarSession(Entidades.Auth Usuario)
+        {
+            string Respuesta;
+            Services.ServicesApi api = new ServicesApi();
+            Entidades.Respuesta Resp = new Entidades.Respuesta();
+            DataAccess bd = new DataAccess();
+
+            try
+            {
+
+                    Respuesta = api.PeticionPost("/lip/api/login/Logout", JsonConvert.SerializeObject(Usuario));
+                    Resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Respuesta);
+                    var user = new Entidades.Auth();
+                    user = JsonConvert.DeserializeObject<Entidades.Auth>(Resp.Objeto.ToString());
+
+                    if (Resp.Lista != null)
+                    {
+
+                        user.Conteo = user.Conteo > 0 ? user.Conteo - 1 : user.Conteo;
+                        bd.SaveLevantado(user);
+                    }
+                    else
+                    {
+                        Resp.Code = 0;
+                        Resp.Response = " Error al Conectar con el SERVER";
+                    }
+                return Resp;
+            }
+            catch (Exception)
+            {
+                return Resp;
+                throw;
+            }
+
+        }
+
     }
 }

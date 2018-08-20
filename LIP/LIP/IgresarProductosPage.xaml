@@ -10,7 +10,7 @@
     <ContentPage.Content>
         <StackLayout>
             
-            <StackLayout Margin="5" Padding="5" BackgroundColor="AliceBlue">
+            <StackLayout Margin="5" Padding="5" BackgroundColor="#EEEEEE">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -27,7 +27,7 @@
                 </Grid>
             </StackLayout>
 
-            <StackLayout Margin="5" Padding="5" BackgroundColor="AliceBlue" >
+            <StackLayout Margin="5" Padding="5" BackgroundColor="#EEEEEE" >
                 <Label Text="Ingrese la Cantidad de Productos"
                 VerticalOptions="Center"
                 FontSize="20"
@@ -37,7 +37,7 @@
             <StackLayout Margin="5" Padding="5" StyleClass="Success">
                 <Image WidthRequest="500"  Source="codebar1.png"  x:Name="imgScanner"></Image>
                 <Label Text="" HorizontalTextAlignment="Center" HorizontalOptions="FillAndExpand" BackgroundColor="White" TextColor="Gray" x:Name="lblResultado" FontSize="24" />
-                <Button Margin="0,5,0,0" StyleClass="Success" Text="Guardar" AnchorX="100" TextColor="White" FontSize="20" BorderColor="Bisque" BackgroundColor="Green" x:Name="btnGuardar" Clicked="btnGuardar_Clicked"></Button>
+                <Button Margin="0,5,0,0" StyleClass="Success" Image="sharp_save_24.xml" Text="Guardar" AnchorX="100" TextColor="White" FontSize="20" BorderColor="Bisque" BackgroundColor="Green" x:Name="btnGuardar" Clicked="btnGuardar_Clicked"></Button>
         </StackLayout>
         </StackLayout>
         

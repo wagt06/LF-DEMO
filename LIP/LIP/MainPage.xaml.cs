@@ -33,6 +33,7 @@ namespace LIP
 
            
         }
+
         public void CargarDatos() {
             try
             {
@@ -65,11 +66,7 @@ namespace LIP
 
 
                     l.Clear();
-                //this.Estantes.ItemsSource = null;
-                // this.BindingContext = null;
-                //if (this.Estantes.Items.Count > 0) {
-                //    this.Estantes.Items.Clear();
-                //}
+
 
                 foreach (object i in Lista)
                 {
@@ -223,6 +220,50 @@ namespace LIP
                 Acr.UserDialogs.UserDialogs.Instance.Toast("Se actualizaron los estantes");
             });
  
+        }
+
+        private void CerrarSession_Clicked(object sender, EventArgs e)
+        {
+           
+            Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Cerrando Sesión!", Acr.UserDialogs.MaskType.None);
+            Task.Run(() => CerrarSession());
+        }
+
+        private void CerrarSession() {
+            try
+            {
+                var servicio = new Services.LoginServices();
+                var respuesta = new Entidades.Respuesta();
+                respuesta = servicio.CerrarSession(Usuario);
+
+                if (respuesta.Code == 1)
+                {
+                    bd.DeleteUser(Usuario);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        DisplayAlert("LIP - PAISAS ", "La session ha sido cerrada!", "OK");
+                        Navigation.PopAsync(true);
+                    });
+
+                }
+                else
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        DisplayAlert("LIP - PAISAS ", respuesta.Response != ""?respuesta.Response:"Error de Conexion", "OK");
+                        Navigation.PopAsync(true);
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                DisplayAlert("LIP - PAISAS ", "Ocurrion un error", "OK");
+               // throw;
+            }
+           
         }
     }
     }

@@ -22,6 +22,7 @@ namespace LIP
     {
         ShowToastPopUp toast = new ShowToastPopUp();
         Boolean Session = new Boolean();
+
         public LoginPage()
         {
             InitializeComponent();
@@ -32,7 +33,7 @@ namespace LIP
             this.IsBusy = true;
 
            if (!RevisarConexion()){
-                Acr.UserDialogs.UserDialogs.Instance.Toast("Active su WIFI! Boboso");
+                Acr.UserDialogs.UserDialogs.Instance.Toast("Active su WIFI!");
                 return;
             }
 

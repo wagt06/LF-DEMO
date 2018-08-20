@@ -7,16 +7,17 @@
              BackgroundColor="White"
             >
     <ContentPage.ToolbarItems  >
-        <ToolbarItem Name="ActEstantes" Clicked="ActEstantes_Clicked" Icon="baseline_cached_24.xml" Priority="0"></ToolbarItem>
+        <ToolbarItem Name="ActEstantes" Clicked="ActEstantes_Clicked" Icon="sharp_history_24.xml" Priority="0" Order="Default"></ToolbarItem>
+        <ToolbarItem Name="CerrarSession" Clicked="CerrarSession_Clicked" Icon="outline_power_settings_new_24.xml" Priority="1" Order="Secondary"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <StackLayout Padding="20">
         <!-- Place new controls here -->
 
 
-        <StackLayout BackgroundColor="#A2A2A2" Padding="5">
+        <StackLayout BackgroundColor="#A2A2A2" Padding="5" Margin="0">
             <Label Text="Datos de Levantado " TextColor="White"></Label>
         </StackLayout>
-        <StackLayout Padding="10,0,20,30" BackgroundColor="LightGray">
+        <StackLayout Padding="10,0,20,30" Margin="0" BackgroundColor="LightGray">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -51,7 +52,7 @@
         </Picker>
 
         <StackLayout Margin="0,50,0,0">
-            <Button x:Name="btnContar" Text="Comenzar Levantado" StyleClass="Primary"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Clicked="Button_Clicked">
+            <Button x:Name="btnContar" Text="Comenzar Levantado" StyleClass="Primary" Image="sharp_shopping_basket_24.xml"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Clicked="Button_Clicked">
             </Button>
         </StackLayout>
     </StackLayout>
