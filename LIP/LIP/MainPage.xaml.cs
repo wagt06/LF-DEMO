@@ -16,6 +16,7 @@ namespace LIP
 	public partial class MainPage : ContentPage
 	{
         public int logo { get; set; }
+ 
         public Entidades.Auth Usuario = new Entidades.Auth();
         public List<object>  Lista = new List<object>();
         public Boolean bEnSession = new Boolean();
