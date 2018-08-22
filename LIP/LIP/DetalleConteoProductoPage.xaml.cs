@@ -16,7 +16,7 @@ namespace LIP
     {
         List<Entidades.DetalleEstante> Items = new List<Entidades.DetalleEstante>();
         public Entidades.DetalleLevantadoTemp Producto = new Entidades.DetalleLevantadoTemp();
-         Services.ProductosServices Servicios = new Services.ProductosServices();
+        Services.ProductosServices Servicios = new Services.ProductosServices();
         Entidades.Respuesta resp = new Entidades.Respuesta();
 
         public DetalleConteoProductoPage()
@@ -25,12 +25,13 @@ namespace LIP
             this.Title = "Conteo por estantes";
         }
 
-        public void Cargar() {
+        public void Cargar()
+        {
             try
             {
-                    resp = Servicios.TraerDetalleEstantes(Producto);
-                    if (resp.Code == 1)
-                    {
+                resp = Servicios.TraerDetalleEstantes(Producto);
+                if (resp.Code == 1)
+                {
                     if (resp.Lista.Count > 0)
                     {
 
@@ -38,27 +39,29 @@ namespace LIP
                         {
                             Items.Add(JsonConvert.DeserializeObject<Entidades.DetalleEstante>(i.ToString()));
                         }
-                       
+
                         this.MyListView.ItemsSource = Items;
                         this.BindingContext = Items;
-                        
+                        this.lblFooter.Text = "Total en todos los estantes : " + Items.Sum(r => Decimal.Parse(r.Resultado)).ToString();
+
                     }
-                    else {
+                    else
+                    {
                         this.Title = "No hay conteo para este Producto! ";
-                       
+
                     }
-                       
-                    }
-               
+
+                }
+
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
             }
             catch (Exception)
             {
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                 return;
-               // throw;
+                // throw;
             }
-          
+
         }
 
         async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
