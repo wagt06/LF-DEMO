@@ -225,7 +225,7 @@ namespace LIP
                             db.GuardarProductoDetalle(pro);
                         }
 
-                        await DisplayAlert("LIP", Resp.Response, "Aceptar");
+                        await DisplayAlert("LIP", "Cantidad Guardada!", "Aceptar");
                         await Navigation.PopAsync();
                     }
 

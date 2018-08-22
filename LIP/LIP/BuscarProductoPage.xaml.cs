@@ -36,12 +36,20 @@ namespace LIP
 
         public void Load()
         {
+            var sizeBtn = new double();
             var conteo = Usuario.Conteo.ToString() == "0" ? " Inicial " : Usuario.Conteo.ToString();
-            this.tbDatos.Text = "Conteo : " + conteo +"| Estante: "+ Usuario.Codigo_Ubicacion + " " + Usuario.NombreUbicacion;
-            //  + " Estante : " + Usuario.Codigo_Ubicacion;
+            this.tbDatos.Text = "Conteo : " + conteo + " Estante : " + Usuario.NombreUbicacion;
             tap = 0;
             this.btnDiferencias.IsVisible = Usuario.Conteo > 0 ? true : false;
-            var sizeBtn = (App.Current.MainPage.Width / 3) - 5;
+            if (this.btnDiferencias.IsEnabled == false)
+            {
+                sizeBtn = (App.Current.MainPage.Width / 3) - 8;
+            }
+            else
+            {
+                sizeBtn = (App.Current.MainPage.Width / 3) - 8;
+            }
+
             btnInventario.WidthRequest = sizeBtn;
             btnContados.WidthRequest = sizeBtn;
             btnDiferencias.WidthRequest = sizeBtn;
