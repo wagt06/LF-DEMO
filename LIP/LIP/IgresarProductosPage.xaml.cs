@@ -74,64 +74,69 @@ namespace LIP
             };
         }
 
-        void btnGuardar_Clicked(object sender, EventArgs e) {
+        void btnGuardar_Clicked(object sender, EventArgs e)
+        {
 
-           
-                var pro = new Entidades.DetalleLevantadoTemp();
-                var Resp = new Entidades.Respuesta();
-                Services.ProductosServices Productos = new Services.ProductosServices();
+
+            var pro = new Entidades.DetalleLevantadoTemp();
+            var Resp = new Entidades.Respuesta();
+            Services.ProductosServices Productos = new Services.ProductosServices();
 
             if (string.IsNullOrEmpty(this.txtCantidad.Text))
             {
-               Acr.UserDialogs.UserDialogs.Instance.Toast("Ingrese una cantidad! ");
+                Acr.UserDialogs.UserDialogs.Instance.Toast("Ingrese una cantidad! ");
                 return;
             }
-                pro.Codigo_Usuario = Usuario.Codigo_Usuario;
-                pro.CodigoSucursal = Usuario.Sucursal;
-                pro.Codigo_Ubicacion = Usuario.Codigo_Ubicacion;
-                pro.Codigo_Factura = Usuario.Parcial;
-                pro.Codigo_Barra = this.lblResultado.Text;
-                pro.Codigo_Producto = this.CodigoProducto;
-                pro.Bodega = this.Usuario.Bodega;
-                pro.Cargado = true;
-                pro.Tipo_Origen = 1;
 
-                 if (Usuario.Conteo == 0)
-                {
-                    pro.Cantidad = double.Parse(this.txtCantidad.Text);
-                    pro.Resultado = double.Parse(this.txtCantidad.Text); ;
+            this.txtCantidad.Text = TruncateDecimal(decimal.Parse(this.txtCantidad.Text), 2).ToString();
 
-                }
-                if (Usuario.Conteo == 1)
-                {
-                    pro.Resultado = double.Parse(this.txtCantidad.Text); 
-                    pro.Conteo1 = double.Parse(this.txtCantidad.Text); 
-                    pro.UC1 = Usuario.Codigo_Usuario;
-                }
-                if (Usuario.Conteo == 2)
-                {
-                    pro.Resultado = double.Parse(this.txtCantidad.Text);
-                    pro.Conteo2 = double.Parse(this.txtCantidad.Text);
-                    pro.UC2 = Usuario.Codigo_Usuario;
-                }
-                if (Usuario.Conteo == 3)
-                {
-                    pro.Resultado = double.Parse(this.txtCantidad.Text);
-                    pro.Conteo3 = double.Parse(this.txtCantidad.Text);
-                    pro.UC3 = Usuario.Codigo_Usuario;
-                }
+            pro.Codigo_Usuario = Usuario.Codigo_Usuario;
+            pro.CodigoSucursal = Usuario.Sucursal;
+            pro.Codigo_Ubicacion = Usuario.Codigo_Ubicacion;
+            pro.Codigo_Factura = Usuario.Parcial;
+            pro.Codigo_Barra = this.lblResultado.Text;
+            pro.Codigo_Producto = this.CodigoProducto;
+            pro.Bodega = this.Usuario.Bodega;
+            pro.Cargado = true;
+            pro.Tipo_Origen = 1;
+
+            if (Usuario.Conteo == 0)
+            {
+                pro.Cantidad = double.Parse(this.txtCantidad.Text);
+                pro.Resultado = double.Parse(this.txtCantidad.Text); ;
+
+            }
+            if (Usuario.Conteo == 1)
+            {
+                pro.Resultado = double.Parse(this.txtCantidad.Text);
+                pro.Conteo1 = double.Parse(this.txtCantidad.Text);
+                pro.UC1 = Usuario.Codigo_Usuario;
+            }
+            if (Usuario.Conteo == 2)
+            {
+                pro.Resultado = double.Parse(this.txtCantidad.Text);
+                pro.Conteo2 = double.Parse(this.txtCantidad.Text);
+                pro.UC2 = Usuario.Codigo_Usuario;
+            }
+            if (Usuario.Conteo == 3)
+            {
+                pro.Resultado = double.Parse(this.txtCantidad.Text);
+                pro.Conteo3 = double.Parse(this.txtCantidad.Text);
+                pro.UC3 = Usuario.Codigo_Usuario;
+            }
 
             Device.BeginInvokeOnMainThread(async () =>
             {
                 var monto = new Double();
-                try 
+                try
                 {
                     //g = Guar
-                   var g = await DisplayAlert(@"LIP Guardar Producto ", " Producto: " + this.NombreProducto + "\n\r"
-                                                                 + " Cantidad :" + this.txtCantidad.Text +"\n\r" 
-                                                                 , "Cancelar", "Guardar");
+                    var g = await DisplayAlert(@"LIP Guardar Producto ", " Producto: " + this.NombreProducto + "\n\r"
+                                                                  + " Cantidad :" + this.txtCantidad.Text + "\n\r"
+                                                                  , "Cancelar", "Guardar");
                     //su guardar es cancelado
-                    if (g) {
+                    if (g)
+                    {
                         return;
                     }
 
@@ -139,10 +144,11 @@ namespace LIP
                     {
                         Resp = Productos.GuardarProducto(pro);
                     }
-                    else {
+                    else
+                    {
                         Resp = Productos.ActualizarProducto(pro);
                     }
-                   
+
                     if (Resp.Code == 3)
                     {
                         var producto = new Entidades.DetalleLevantadoTemp();
@@ -151,7 +157,7 @@ namespace LIP
                                                                  + " que acción desea realizar?." + "\n\r" +
                                                                    " Actualizar = " + pro.Resultado + "\n\r" +
                                                                    " Agregar(Sumar) = " + (pro.Resultado + producto.Resultado), "Agregar", "Actualizar");
-                   
+
                         if (!respuesta)
                         { //true -> Sobreescribir
                             monto = pro.Resultado;
@@ -186,30 +192,33 @@ namespace LIP
                             pro.Conteo3 = monto;
                             pro.UC3 = Usuario.Codigo_Usuario;
                         }
-                        var R =  Productos.ActualizarProducto(pro);
+                        var R = Productos.ActualizarProducto(pro);
                         Resp.Response = R.Response;
                         Resp.Code = R.Code;
                     }
 
-             
-                   
 
-                    if (Resp.Code == 1) {
+
+
+                    if (Resp.Code == 1)
+                    {
                         var lista = new List<Entidades.DetalleLevantadoTemp>();
                         lista = db.BuscarProductoDetalle(pro);
                         if (lista.Count > 0)
                         {
-                            db.ActualizarProductoDetalle(pro.Codigo_Usuario, pro.Codigo_Producto, pro.Codigo_Factura, pro.CodigoSucursal, pro.Codigo_Ubicacion, pro.Bodega, monto , Usuario.Conteo);
+                            db.ActualizarProductoDetalle(pro.Codigo_Usuario, pro.Codigo_Producto, pro.Codigo_Factura, pro.CodigoSucursal, pro.Codigo_Ubicacion, pro.Bodega, monto, Usuario.Conteo);
                         }
                         else
                         {
                             db.GuardarProductoDetalle(pro);
                         }
+
                         await DisplayAlert("LIP", Resp.Response, "Aceptar");
                         await Navigation.PopAsync();
                     }
 
-                    if (Resp.Code == 5) {
+                    if (Resp.Code == 5)
+                    {
 
                         await DisplayAlert("LIP", Resp.Response, "Aceptar");
                         Usuario.Codigo_Ubicacion = 0;
@@ -222,7 +231,7 @@ namespace LIP
                     {
                         await DisplayAlert("LIP", Resp.Response, "Aceptar");
                         Usuario.Codigo_Ubicacion = 0;
-                        Usuario.IsCerrado = true ;
+                        Usuario.IsCerrado = true;
                         db.UpdateLevantado(Usuario);
                         await Navigation.PopAsync();
                     }
@@ -232,26 +241,31 @@ namespace LIP
                     }
 
 
-                    if (Resp.Response == null) {
+                    if (Resp.Response == null)
+                    {
                         await DisplayAlert("LIP", "Error Tiempo Espera Excedido!!", "Aceptar");
                     }
 
                 }
                 catch (Exception)
                 {
-                    await DisplayAlert("LIP","Ocurrio un error al guardar!", "Aceptar");
+                    await DisplayAlert("LIP", "Ocurrio un error al guardar!", "Aceptar");
                     return;
-                   // throw;
+                    // throw;
                 }
-              
+
             });
-  
-                //await Navigation.PopAsync();
-                //lblResultado.Text = resultado.Text;
-           
+
+            //await Navigation.PopAsync();
+            //lblResultado.Text = resultado.Text;
+
 
         }
 
+        private object TruncateDecimal(decimal v1, int v2)
+        {
+            throw new NotImplementedException();
+        }
 
         private void TapImgScannerAsync() {
 
