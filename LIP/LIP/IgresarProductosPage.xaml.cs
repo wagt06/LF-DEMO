@@ -147,7 +147,7 @@ namespace LIP
                     {
                         var producto = new Entidades.DetalleLevantadoTemp();
                         producto = JsonConvert.DeserializeObject<Entidades.DetalleLevantadoTemp>(Resp.Objeto.ToString());
-                        var respuesta = await DisplayAlert(@"LIP Producto Contado", " ya tiene conteo de " + producto.Resultado + "\n\r"
+                        var respuesta = await DisplayAlert(@" LIP Producto Contado", " ya tiene conteo de " + producto.Resultado + "\n\r"
                                                                  + " que acción desea realizar?." + "\n\r" +
                                                                    " Actualizar = " + pro.Resultado + "\n\r" +
                                                                    " Agregar(Sumar) = " + (pro.Resultado + producto.Resultado), "Agregar", "Actualizar");
