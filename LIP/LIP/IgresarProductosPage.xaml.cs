@@ -132,10 +132,10 @@ namespace LIP
                 {
                     //g = Guar
                     var g = await DisplayAlert(@"LIP Guardar Producto ", " Producto: " + this.NombreProducto + "\n\r"
-                                                                  + " Cantidad :" + this.txtCantidad.Text + "\n\r"
-                                                                  , "Cancelar", "Guardar");
+                                                                  + "Cantidad :" + this.txtCantidad.Text + "\n\r"
+                                                                  , "Guardar", "Cancelar");
                     //su guardar es cancelado
-                    if (g)
+                    if (!g)
                     {
                         return;
                     }
@@ -153,19 +153,31 @@ namespace LIP
                     {
                         var producto = new Entidades.DetalleLevantadoTemp();
                         producto = JsonConvert.DeserializeObject<Entidades.DetalleLevantadoTemp>(Resp.Objeto.ToString());
-                        var respuesta = await DisplayAlert(@" LIP Producto Contado", " ya tiene conteo de " + producto.Resultado + "\n\r"
-                                                                 + " que acción desea realizar?." + "\n\r" +
-                                                                   " Actualizar = " + pro.Resultado + "\n\r" +
-                                                                   " Agregar(Sumar) = " + (pro.Resultado + producto.Resultado), "Agregar", "Actualizar");
 
-                        if (!respuesta)
+                        var respuesta = await Acr.UserDialogs.UserDialogs.Instance.PromptAsync(@"ya tiene conteo de " + producto.Resultado + "\n\r"
+                                                                                              + "que monto desea Guardar?. Digite la Opción " + "\n\r" +
+                                                                                                "1 = " + pro.Resultado + "\n\r" +
+                                                                                                "2 = " + producto.Resultado + "\n\r","LIP - Los Paisas","Guardar","Cancelar", "Escribe la Opción", Acr.UserDialogs.InputType.Default);
+
+
+                        //var respuesta = await DisplayAlert(@" LIP Producto Contado", " ya tiene conteo de " + producto.Resultado + "\n\r"
+                        //                                         + " que acción desea realizar?." + "\n\r" +
+                        //                                           " Actualizar = " + pro.Resultado + "\n\r" +
+                        //                                           " Agregar(Sumar) = " + (pro.Resultado + producto.Resultado), "Agregar", "Actualizar");
+                        if (!respuesta.Ok) {
+                            return;
+                        }
+                        if (respuesta.Text == "1")
                         { //true -> Sobreescribir
                             monto = pro.Resultado;
                         }
-                        else
+                        if (respuesta.Text == "2")
                         {// Agregarla
                             monto = (pro.Resultado + producto.Resultado);
                             monto = (float)(Math.Round((double)monto, 2));
+                        }
+                        else {
+                            return;
                         }
 
                         if (Usuario.Conteo == 0)

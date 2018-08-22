@@ -11,9 +11,9 @@
     </ContentPage.ToolbarItems>
     <StackLayout Margin="5" Orientation="Vertical" >
         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-            <Button Text="Items"  HorizontalOptions="CenterAndExpand" Image="sharp_shopping_basket_24.xml" x:Name="btnInventario" Clicked="btnInventario_Clicked"></Button>
-            <Button Text="Contados"  HorizontalOptions="CenterAndExpand" Image="sharp_record_voice_over_24.xml" x:Name="btnContados" Clicked="btnContados_Clicked"></Button>
-            <Button Text="Diferencias" HorizontalOptions="CenterAndExpand" Image="sharp_report_problem_24.xml"  x:Name="btnDiferencias" Clicked="btnDiferencias_Clicked" ></Button>
+            <Button Text="Items"  FontSize="Small" HorizontalOptions="CenterAndExpand" Image="sharp_shopping_basket_24.xml" x:Name="btnInventario" Clicked="btnInventario_Clicked"></Button>
+            <Button Text="Contados" FontSize="Small"  HorizontalOptions="CenterAndExpand" Image="sharp_record_voice_over_24.xml" x:Name="btnContados" Clicked="btnContados_Clicked"></Button>
+            <Button Text="Diferencias"  FontSize="Small"  HorizontalOptions="CenterAndExpand" Image="sharp_report_problem_24.xml"  x:Name="btnDiferencias" Clicked="btnDiferencias_Clicked" ></Button>
         </StackLayout>
         <StackLayout>
             <SearchBar HeightRequest="40.0" Placeholder="Buscar Productos" PlaceholderColor="LightGray" x:Name="btnBusqueda" TextChanged="Entry_TextChanged" ></SearchBar>

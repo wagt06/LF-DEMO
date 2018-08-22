@@ -24,7 +24,7 @@ namespace LIP
 		protected override void OnStart ()
 		{
             // Handle when your app starts
-            Localization.Current.CurrentCultureInfo = Localization.Current.GetCultureInfo("es-AR");
+            Localization.Current.CurrentCultureInfo = Localization.Current.GetCultureInfo("es-NI");
         }
 
 		protected override void OnSleep ()

@@ -18,6 +18,7 @@ namespace LIP.Entidades
         public String Cedula { get; set; }
         public bool IsCerrado { get; set; }
         public int Conteo { get; set;  }
+        public string NombreUbicacion { get; set; }
     }
 
     

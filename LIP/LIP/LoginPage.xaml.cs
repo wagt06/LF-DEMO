@@ -33,7 +33,7 @@ namespace LIP
             this.IsBusy = true;
 
            if (!RevisarConexion()){
-                Acr.UserDialogs.UserDialogs.Instance.Toast("Active su WIFI!");
+                Acr.UserDialogs.UserDialogs.Instance.Toast("Conectese a la red WIFI!");
                 return;
             }
 

@@ -36,8 +36,9 @@ namespace LIP
 
         }
 
-        public void CargarDatos()
+        public Boolean CargarDatos()
         {
+            
             try
             {
                 cargarCombo = true;
@@ -79,8 +80,6 @@ namespace LIP
 
                 this.BindingContext = l;
                 this.Estantes.ItemsSource = l;
-
-
                 this.lblBodega.Text = Usuario.Bodega.ToString();
                 this.lblSucursal.Text = Usuario.Sucursal.ToString();
                 this.lblUsuario.Text = Usuario.Nombre;
@@ -100,7 +99,7 @@ namespace LIP
                     this.btnContar.Text = "Seguir Contando ";
                     this.btnContar.IsVisible = true;
                     this.Estantes.IsVisible = false;
-                    this.lblEstante.Text = " " + Usuario.Codigo_Ubicacion.ToString() + " Nombre: " + Usuario.NombreUbicacion;
+                    this.lblEstante.Text = " Cod: " + Usuario.Codigo_Ubicacion.ToString() + "| Nombre: " + Usuario.NombreUbicacion;
                 }
                 else
                 {
@@ -109,8 +108,10 @@ namespace LIP
                     this.btnContar.Text = "Iniciar Conteo";
                     this.lblEstante.Text = "Estante No Seleccionado";
                 }
+ 
                 cargarCombo = false;
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                return false;
 
             }
             catch (Exception ex)
@@ -124,7 +125,7 @@ namespace LIP
                     await DisplayAlert("LIP", "Ocurrio un error " + ex.Message, "Aceptar");
                 });
 
-                return;
+                return false;
             }
 
         }
@@ -184,7 +185,13 @@ namespace LIP
             else
             {
                 DisplayAlert("LIP", "Ocurrio un error al seleccionar el estante, Intentelo de nuevo", "Aceptar");
-                CargarDatos();
+                Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Cerrando Sesión!", Acr.UserDialogs.MaskType.None);
+                Device.BeginInvokeOnMainThread(() =>
+                { 
+                    var Cd = new Boolean();
+                    Cd = CargarDatos();
+                });
+               
             }
 
         }

@@ -37,7 +37,7 @@ namespace LIP
         public void Load()
         {
             var conteo = Usuario.Conteo.ToString() == "0" ? " Inicial " : Usuario.Conteo.ToString();
-            this.tbDatos.Text = "Conteo : " + conteo;
+            this.tbDatos.Text = "Conteo : " + conteo +"| Estante: "+ Usuario.Codigo_Ubicacion + " " + Usuario.NombreUbicacion;
             //  + " Estante : " + Usuario.Codigo_Ubicacion;
             tap = 0;
             this.btnDiferencias.IsVisible = Usuario.Conteo > 0 ? true : false;
@@ -313,27 +313,26 @@ namespace LIP
                 Usuario = db.GetAllLevantado(Usuario.Cedula);
                 if (Usuario.Codigo_Ubicacion == 0)
                 {
+                    this.btnBusqueda.Text = "";
                     Navigation.PopAsync(true);
                 }
 
                 if (buttonSelect == 3)
                 {
+                    this.btnBusqueda.Text = "";
                     btnDiferencias_Clicked(null, null);
                 }
                 if (buttonSelect == 2)
                 {
+                    this.btnBusqueda.Text = "";
                     btnContados_Clicked(null, null);
                 }
-
             }
             catch (Exception)
             {
-
+                return;
                 //throw;
             }
-
-
-
         }
 
 
