@@ -262,9 +262,11 @@ namespace LIP
 
         }
 
-        private object TruncateDecimal(decimal v1, int v2)
+        public decimal TruncateDecimal(decimal value, int precision)
         {
-            throw new NotImplementedException();
+            decimal step = (decimal)Math.Pow(10, precision);
+            decimal tmp = Math.Truncate(step * value);
+            return tmp / step;
         }
 
         private void TapImgScannerAsync() {
