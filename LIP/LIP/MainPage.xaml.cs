@@ -13,68 +13,70 @@ using Xamarin.Forms;
 
 namespace LIP
 {
-	public partial class MainPage : ContentPage
-	{
-        public int logo { get; set; }
- 
+    public partial class MainPage : ContentPage
+    {
+
+
         public Entidades.Auth Usuario = new Entidades.Auth();
-        public List<object>  Lista = new List<object>();
+        public List<object> Lista = new List<object>();
         public Boolean bEnSession = new Boolean();
         public ObservableCollection<Entidades.Lista> l = new ObservableCollection<Entidades.Lista>();
         Services.EstantesServices Servicio = new Services.EstantesServices();
         Boolean EstanteActivo = new Boolean();
         Boolean cargarCombo = new Boolean();
-        public  Boolean VienededeLogin = new Boolean();
+        public Boolean VienededeLogin = new Boolean();
         ShowToastPopUp t = new ShowToastPopUp();
         DataAccess bd = new DataAccess();
 
         public MainPage()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
             var c = new Conexion();
 
-           
+
         }
 
-        public void CargarDatos() {
+        public void CargarDatos()
+        {
             try
             {
-                    cargarCombo = true;
-                    Entidades.Auth item = new Entidades.Auth();
-                    Entidades.Respuesta Respuesta = new Entidades.Respuesta();
-                    BuscarProductoPage f = new BuscarProductoPage();
+                cargarCombo = true;
+                Entidades.Auth item = new Entidades.Auth();
+                Entidades.Respuesta Respuesta = new Entidades.Respuesta();
+                BuscarProductoPage f = new BuscarProductoPage();
 
-                    var Conteo = string.Empty;
-                 Conteo = Servicio.Conteo(Usuario);
-                 Respuesta = Servicio.TraerUbicaciones(Usuario);
+                var Conteo = string.Empty;
+                Conteo = Servicio.Conteo(Usuario);
+                Respuesta = Servicio.TraerUbicaciones(Usuario);
 
-                 if (Respuesta.Code == 1) {
-                        Lista = Respuesta.Lista;
-                 }
-          
+                if (Respuesta.Code == 1)
+                {
+                    Lista = Respuesta.Lista;
+                }
+
 
                 if (Usuario.IsCerrado)
                 {
                     Usuario.Codigo_Ubicacion = 0;
                 }
 
-                if ((int.Parse(Conteo)) -1 != Usuario.Conteo)
-                    {
-                                Lista = Respuesta.Lista;
-                                Usuario.Conteo = (int.Parse(Conteo)) - 1;
-                                Usuario.Codigo_Ubicacion = 0;
-                                bd.EjecutarQueryScalar(string.Format("UPDATE Auth SET  Conteo={0}, isCerrado= 0 ,Codigo_Ubicacion = {2} WHERE Codigo_Usuario ={1}", (int.Parse(Conteo) - 1), Usuario.Codigo_Usuario,Usuario.Codigo_Ubicacion));
-                    }
+                if ((int.Parse(Conteo)) - 1 != Usuario.Conteo)
+                {
+                    Lista = Respuesta.Lista;
+                    Usuario.Conteo = (int.Parse(Conteo)) - 1;
+                    Usuario.Codigo_Ubicacion = 0;
+                    bd.EjecutarQueryScalar(string.Format("UPDATE Auth SET  Conteo={0}, isCerrado= 0 ,Codigo_Ubicacion = {2}, NombreUbicacion = {3}  WHERE Codigo_Usuario ={1}", (int.Parse(Conteo) - 1), Usuario.Codigo_Usuario, Usuario.Codigo_Ubicacion, Usuario.NombreUbicacion));
+                }
 
 
-                    l.Clear();
+                l.Clear();
 
 
                 foreach (object i in Lista)
                 {
-                  l.Add(JsonConvert.DeserializeObject<Entidades.Lista>(i.ToString()));
+                    l.Add(JsonConvert.DeserializeObject<Entidades.Lista>(i.ToString()));
                 }
-                
+
                 this.BindingContext = l;
                 this.Estantes.ItemsSource = l;
 
@@ -98,7 +100,7 @@ namespace LIP
                     this.btnContar.Text = "Seguir Contando ";
                     this.btnContar.IsVisible = true;
                     this.Estantes.IsVisible = false;
-                    this.lblEstante.Text = Usuario.Codigo_Ubicacion.ToString();
+                    this.lblEstante.Text = " " + Usuario.Codigo_Ubicacion.ToString() + " Nombre: " + Usuario.NombreUbicacion;
                 }
                 else
                 {
@@ -109,9 +111,9 @@ namespace LIP
                 }
                 cargarCombo = false;
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
-    
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 // throw;.
@@ -119,12 +121,12 @@ namespace LIP
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                 await   DisplayAlert("LIP", " Error de Conexion", "Aceptar");
+                    await DisplayAlert("LIP", "Ocurrio un error " + ex.Message, "Aceptar");
                 });
-       
+
                 return;
             }
-          
+
         }
 
         private void Iniciar()
@@ -132,7 +134,7 @@ namespace LIP
 
             // var f = new BuscarProductoPage();
             //this.Navigation.PushAsync(f,true);
-           // Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Iniciando Session!", Acr.UserDialogs.MaskType.Black);
+            // Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Iniciando Session!", Acr.UserDialogs.MaskType.Black);
 
         }
 
@@ -148,7 +150,8 @@ namespace LIP
                 this.Estantes.IsVisible = true;
                 this.btnContar.IsVisible = false;
             }
-            else {
+            else
+            {
                 this.btnContar.IsVisible = true;
 
             }
@@ -157,13 +160,14 @@ namespace LIP
         private void Estantes_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            if (cargarCombo) {
+            if (cargarCombo)
+            {
                 return;
             }
             Entidades.Auth item = new Entidades.Auth();
             Entidades.Respuesta Respuesta = new Entidades.Respuesta();
             var r = (Entidades.Lista)this.Estantes.SelectedItem;
-         
+
 
             item = Usuario;
             item.Codigo_Ubicacion = r.Codigo_Ubicacion;
@@ -177,20 +181,23 @@ namespace LIP
                 f.Load();
                 this.Navigation.PushAsync(f, true);
             }
-            else {
-                DisplayAlert("LIP", "Ocurrio al seleccionar el estante, Intentelo de nuevo", "Aceptar");
+            else
+            {
+                DisplayAlert("LIP", "Ocurrio un error al seleccionar el estante, Intentelo de nuevo", "Aceptar");
+                CargarDatos();
             }
 
-            }
+        }
 
-     
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
-           
+
             try
             {
-                if (!this.VienededeLogin) {
+                if (!this.VienededeLogin)
+                {
                     Entidades.Respuesta Respuesta = new Entidades.Respuesta();
                     Usuario = bd.GetAllLevantado(Usuario.Cedula);
                     if (Usuario.IsCerrado)
@@ -198,7 +205,7 @@ namespace LIP
                         Usuario.Codigo_Ubicacion = 0;
                     }
                     CargarDatos();
-                } 
+                }
 
             }
             catch (Exception)
@@ -218,20 +225,21 @@ namespace LIP
                 Entidades.Respuesta Respuesta = new Entidades.Respuesta();
                 Usuario = bd.GetAllLevantado(Usuario.Cedula);
                 CargarDatos();
-    
+
                 Acr.UserDialogs.UserDialogs.Instance.Toast("Se actualizaron los estantes");
             });
- 
+
         }
 
         private void CerrarSession_Clicked(object sender, EventArgs e)
         {
-           
+
             Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Cerrando Sesión!", Acr.UserDialogs.MaskType.None);
             Task.Run(() => CerrarSession());
         }
 
-        private void CerrarSession() {
+        private void CerrarSession()
+        {
             try
             {
                 var servicio = new Services.LoginServices();
@@ -254,7 +262,7 @@ namespace LIP
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         Acr.UserDialogs.UserDialogs.Instance.HideLoading();
-                        DisplayAlert("LIP - PAISAS ", respuesta.Response != ""?respuesta.Response:"Error de Conexion", "OK");
+                        DisplayAlert("LIP - PAISAS ", respuesta.Response != "" ? respuesta.Response : "Error de Conexion", "OK");
                         Navigation.PopAsync(true);
                     });
                 }
@@ -263,9 +271,9 @@ namespace LIP
             {
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                 DisplayAlert("LIP - PAISAS ", "Ocurrion un error", "OK");
-               // throw;
+                // throw;
             }
-           
+
         }
     }
-    }
+}
