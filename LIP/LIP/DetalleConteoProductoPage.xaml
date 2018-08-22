@@ -3,27 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LIP.DetalleConteoProductoPage">
 
+    <StackLayout Margin="20">
+        <StackLayout Padding="10" BackgroundColor="DarkGray" Orientation="Horizontal">
+            <Label Text="Estante" WidthRequest="200"  TextColor="White" FontSize="Large" FontAttributes="Bold" />
+            <Label Text="Cantidad" FontSize="Default" TextColor="White" FontAttributes="Bold"/>
+        </StackLayout>
 
-    <ListView x:Name="MyListView"
+        <ListView x:Name="MyListView"
                 ItemsSource="{Binding Items}"
                 ItemTapped="Handle_ItemTapped"
                 CachingStrategy="RecycleElement"
                 Margin="10">
-        <ListView.Header>
-            <StackLayout Padding="10" BackgroundColor="DarkGray" Orientation="Horizontal">
-                <Label Text="Estante" WidthRequest="200"  TextColor="White" FontSize="Large" FontAttributes="Bold" />
-                <Label Text="Cantidad" FontSize="Large"  TextColor="White" FontAttributes="Bold"/>
-            </StackLayout>
-        </ListView.Header>
-        <ListView.Footer>
-            <StackLayout>
-                <Label x:Name="lblFooter"></Label>
-            </StackLayout>
-        </ListView.Footer>
-
-        <ListView.ItemTemplate >
-            <DataTemplate >
-                <ViewCell>
+            <ListView.ItemTemplate >
+                <DataTemplate >
+                    <ViewCell>
                         <StackLayout Orientation="Horizontal" Padding="10">
                             <Label Text="{Binding Nombre}" FontAttributes="Bold" WidthRequest="200"></Label>
                             <Label Text="{Binding Resultado}" ></Label>
@@ -32,5 +25,10 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <StackLayout Padding="10" BackgroundColor="DarkGray" Orientation="Horizontal">
+            <Label x:Name="lblFooter" Text="Total: " FontSize="Default"  TextColor="White" FontAttributes="Bold"></Label>
+        </StackLayout>
+    </StackLayout>
 
 </ContentPage>
