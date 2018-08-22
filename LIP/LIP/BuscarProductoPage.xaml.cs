@@ -20,31 +20,32 @@ namespace LIP
         public Boolean isCerrardo = new Boolean();
         public Entidades.Auth Usuario = new Entidades.Auth();
         Productos p = new Productos();
-        private  int tap;
+        private int tap;
         private int buttonSelect;
 
-        List<Productos> listContado =  new List<Productos>();
+        List<Productos> listContado = new List<Productos>();
 
         List<Productos> listDiferencias = new List<Productos>();
 
         public BuscarProductoPage()
         {
             InitializeComponent();
-           this.lvwProductos.ItemsSource = db.GetAllProd();
+            this.lvwProductos.ItemsSource = db.GetAllProd();
             buttonSelect = 1;
         }
 
         public void Load()
         {
-            this.tbDatos.Text = "Conteo: " + Usuario.Conteo;
-              //  + " Estante : " + Usuario.Codigo_Ubicacion;
+            var conteo = Usuario.Conteo.ToString() == "0" ? " Inicial " : Usuario.Conteo.ToString();
+            this.tbDatos.Text = "Conteo : " + conteo;
+            //  + " Estante : " + Usuario.Codigo_Ubicacion;
             tap = 0;
-            this.btnDiferencias.IsVisible = Usuario.Conteo > 0 ? true:false;
-            var sizeBtn = (App.Current.MainPage.Width / 3)-5;
+            this.btnDiferencias.IsVisible = Usuario.Conteo > 0 ? true : false;
+            var sizeBtn = (App.Current.MainPage.Width / 3) - 5;
             btnInventario.WidthRequest = sizeBtn;
             btnContados.WidthRequest = sizeBtn;
             btnDiferencias.WidthRequest = sizeBtn;
-            btnInventario_Clicked(null,null);
+            btnInventario_Clicked(null, null);
         }
 
         private void Button_Clicked(object sender, EventArgs e)
@@ -53,7 +54,8 @@ namespace LIP
 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                if (this.listDiferencias.Count != 0 && Usuario.Conteo > 0 ) {
+                if (this.listDiferencias.Count != 0 && Usuario.Conteo > 0)
+                {
                     await DisplayAlert("Cerrar Estantes", "No se puede cerrar el estante hasta nque todos los productos con diferencias esten contados, la lista debe de estar limpia.", "Ok");
                     return;
                 }
@@ -61,37 +63,50 @@ namespace LIP
                 var respuesta = await DisplayAlert("Cerrar Estantes", "Seguro que desea Cerrar el Estante Actual", "Aceptar", "Cancelar");
                 if (respuesta == true)
                 {
-                    var resp = await Acr.UserDialogs.UserDialogs.Instance.PromptAsync("Ingrese su credencial para confirmar", "LIP", "Cerrar Estante", "Cancelar", "Tus Credenciales",Acr.UserDialogs.InputType.Default);
-                    if (resp.Text.ToUpper() == Usuario.Cedula.ToUpper())
+                    var resp = await Acr.UserDialogs.UserDialogs.Instance.PromptAsync("Ingrese su credencial para confirmar", "LIP", "Cerrar Estante", "Cancelar", "Tus Credenciales", Acr.UserDialogs.InputType.Default);
+                    if (resp.Text.ToUpper().Trim() == Usuario.Cedula.ToUpper().Trim())
                     {
                         var estantes = new Services.EstantesServices();
+                        var res = new Entidades.Respuesta();
+                        res = estantes.CerrarUbicacion(Usuario);
                         Usuario.IsCerrado = true;
                         Usuario.Codigo_Ubicacion = 0;
-                        if (db.CerrarEstante(Usuario) == 1)
+                        if (res.Code == 1)
                         {
-                            var res = new Entidades.Respuesta();
-                            res = estantes.CerrarUbicacion(Usuario);
+                            db.CerrarEstante(Usuario);
                             await Navigation.PopAsync(true);
                         }
+                        if (res.Code == 6)
+                        {
+                            await DisplayAlert("LIP", res.Response, "Aceptar");
+                            Usuario.Codigo_Ubicacion = 0;
+                            Usuario.NombreUbicacion = "";
+                            Usuario.IsCerrado = true;
+                            db.UpdateLevantado(Usuario);
+                            await Navigation.PopAsync();
+                        }
                     }
-                    else {
+                    else
+                    {
 
                         Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("Credenciales no validas!"));
                     }
-                   
+
                 }
 
             });
         }
 
-        private void CargarProductosContados() {
+        private void CargarProductosContados()
+        {
             try
             {
                 var servicios = new Services.ProductosServices();
                 var Lista = new List<Productos>();
                 var respuesta = servicios.TraerListaProductosContados(Usuario);
 
-                if (respuesta.Code == 1) {
+                if (respuesta.Code == 1)
+                {
                     if (respuesta.Lista.Count > 0)
                     {
                         List<Entidades.ListaProductos> lp = new List<Entidades.ListaProductos>();
@@ -109,37 +124,56 @@ namespace LIP
                                 Codigo = i.Codigo_Producto,
                                 Nombre = i.Nombre,
                                 Estado = i.Estado,
-                                Resultado = i.Resultado
-
+                                Resultado = i.Resultado,
+                                Conteo1 = i.Conteo1,
+                                Conteo2 = i.Conteo2,
+                                Conteo3 = i.Conteo3
                             });
                         }
 
-                        if (this.buttonSelect == 2) {
+                        if (this.buttonSelect == 2)
+                        {
 
                             listContado = Lista;
-                            this.lvwProductos.ItemsSource = listContado;
+                            Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                this.lvwProductos.ItemsSource = listContado;
+                            });
+
                         }
                         if (this.buttonSelect == 3)
                         {
-                            if (listDiferencias.Count <= 0) {
-                                if (Usuario.Conteo == 1) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo1 == 0).ToList(); }
-                                if (Usuario.Conteo == 2) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo2 == 0).ToList(); }
-                                if (Usuario.Conteo == 3) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo3 == 0).ToList(); }
-                            }
-                            this.lvwProductos.ItemsSource = listDiferencias; 
+                            if (Usuario.Conteo == 1) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo1 == 0).ToList(); }
+                            if (Usuario.Conteo == 2) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo2 == 0).ToList(); }
+                            if (Usuario.Conteo == 3) { listDiferencias = Lista.Where(x => x.Estado == "0" && x.Conteo3 == 0).ToList(); }
+
+                            Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                this.lvwProductos.ItemsSource = listDiferencias;
+                            });
+
                         }
 
                     }
-                    else {
-                        this.lvwProductos.ItemsSource = new List<Productos>();
+                    else
+                    {
+                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            this.lvwProductos.ItemsSource = new List<Productos>();
+                        });
+
                     }
-                 
+
                 }
             }
             catch (Exception)
             {
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                 return;
-              // throw;
+                // throw;
             }
 
 
@@ -156,7 +190,7 @@ namespace LIP
                     l = db.FindProductos(e.NewTextValue.ToUpper());
                     this.lvwProductos.ItemsSource = l;
                 }
-                if (this.buttonSelect == 2 ) //Lista de Productos de Inventario
+                if (this.buttonSelect == 2) //Lista de Productos de Inventario
                 {
                     var result = listContado.Where(c => c.Nombre.ToUpper().Contains(e.NewTextValue.ToString().ToUpper()));
                     if (string.IsNullOrEmpty(e.NewTextValue))
@@ -169,45 +203,56 @@ namespace LIP
                     }
                     this.lvwProductos.ItemsSource = result;
                 }
-                if (this.buttonSelect == 3) {
+                if (this.buttonSelect == 3)
+                {
 
                     var result = listDiferencias.Where(c => c.Nombre.ToUpper().Contains(e.NewTextValue.ToString().ToUpper()));
 
 
-                    if (string.IsNullOrEmpty(e.NewTextValue)){
+                    if (string.IsNullOrEmpty(e.NewTextValue))
+                    {
                         this.lvwProductos.ItemsSource = listDiferencias;
                     }
-                    else{
+                    else
+                    {
                         this.lvwProductos.ItemsSource = result;
                     }
-                    
+
                 }
 
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
                 //throw;
             }
         }
 
-    
+
         private void ViewCell_Tapped(object sender, EventArgs e)
         {
+            if (buttonSelect == 2)
+            {
+                Acr.UserDialogs.UserDialogs.Instance.Toast("Aqui no podes guardar nada, Buscar en inventario o en los productos que tienen diferencias!");
+                return;
+            }
+
             Productos p2 = new Productos();
             tap += 1;
             p2 = p;
-           
+
             p = (Productos)this.lvwProductos.SelectedItem;
             if (p2 != p)
+
             {
                 tap = 1;
             }
 
-            if (tap == 2) {
-           
+            if (tap == 2)
+            {
+
                 var f = new IgresarProductosPage();
                 f.CodigoProducto = p.Codigo;
                 f.NombreProducto = p.Nombre;
@@ -218,18 +263,19 @@ namespace LIP
             }
 
         }
-        private void ClickVerDetalle(object sender, EventArgs e) {
+        private void ClickVerDetalle(object sender, EventArgs e)
+        {
             try
             {
-                
+
                 var DetalleProducto = new DetalleConteoProductoPage();
                 p = (Productos)this.lvwProductos.SelectedItem;
                 if (p != null)
                 {
                     Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Descargando Detalle", Acr.UserDialogs.MaskType.Clear);
                     Device.BeginInvokeOnMainThread(async () =>
-                {
-                   
+                    {
+
                         DetalleProducto.Producto.CodigoSucursal = Usuario.Sucursal;
                         DetalleProducto.Producto.Codigo_Factura = Usuario.Parcial;
                         DetalleProducto.Producto.Bodega = Usuario.Bodega;
@@ -238,8 +284,8 @@ namespace LIP
 
                         // Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                         await Navigation.PushAsync(DetalleProducto, true);
-                    
-                });
+
+                    });
                 }
             }
             catch (Exception)
@@ -247,7 +293,7 @@ namespace LIP
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                 DisplayAlert("LIP", "Seleccione un Producto", "OK");
                 return;
-               // throw;
+                // throw;
             }
         }
 
@@ -270,25 +316,23 @@ namespace LIP
                     Navigation.PopAsync(true);
                 }
 
-                if (Usuario.Conteo > 0)
+                if (buttonSelect == 3)
                 {
-                    if (listDiferencias.Count > 0) {
-                        listDiferencias.Remove(p); //eliminamos de la lista de Conteo con dif.
-                        if (buttonSelect != 1) {
-                            this.lvwProductos.ItemsSource = new List<Productos>();
-                            this.lvwProductos.ItemsSource = listDiferencias;
-                        }
-                    }
-
+                    btnDiferencias_Clicked(null, null);
                 }
+                if (buttonSelect == 2)
+                {
+                    btnContados_Clicked(null, null);
+                }
+
             }
             catch (Exception)
             {
 
                 //throw;
             }
-           
-           
+
+
 
         }
 
@@ -298,20 +342,24 @@ namespace LIP
             buttonSelect = 3;
             var colorDefecto = btnDiferencias.BackgroundColor;
             btnDiferencias.BackgroundColor = Color.DarkRed;
-            btnContados.BackgroundColor = colorDefecto;
-            btnInventario.BackgroundColor = colorDefecto;
-            CargarProductosContados();
+            btnContados.BackgroundColor = Color.LightGray;
+            btnInventario.BackgroundColor = Color.LightGray;
+            Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Refrescando!", Acr.UserDialogs.MaskType.Clear);
+            Task.Run(() => CargarProductosContados());
         }
-    
+
 
         private void btnContados_Clicked(object sender, EventArgs e)
         {
             buttonSelect = 2;
             var colorDefecto = btnContados.BackgroundColor;
             btnContados.BackgroundColor = Color.DarkRed;
-            btnDiferencias.BackgroundColor = colorDefecto;
-            btnInventario.BackgroundColor = colorDefecto;
-            CargarProductosContados();    
+            btnDiferencias.BackgroundColor = Color.LightGray;
+            btnInventario.BackgroundColor = Color.LightGray;
+
+            Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Refrescando!", Acr.UserDialogs.MaskType.Clear);
+            Task.Run(() => CargarProductosContados());
+
         }
 
         private void btnInventario_Clicked(object sender, EventArgs e)
@@ -319,9 +367,12 @@ namespace LIP
             buttonSelect = 1;
             var colorDefecto = btnInventario.BackgroundColor;
             btnInventario.BackgroundColor = Color.DarkRed;
-            btnDiferencias.BackgroundColor = colorDefecto;
-            btnContados.BackgroundColor = colorDefecto;
-            this.lvwProductos.ItemsSource = db.GetAllProd();
+            btnDiferencias.BackgroundColor = Color.LightGray;
+            btnContados.BackgroundColor = Color.LightGray;
+            var list = new List<Productos>();
+            this.lvwProductos.ItemsSource = this.db.GetAllProd();
         }
+
     }
+
 }
