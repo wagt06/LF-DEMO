@@ -2,6 +2,7 @@ using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 [assembly: XamlCompilation (XamlCompilationOptions.Compile)]
 namespace LIP
 {
@@ -22,8 +23,9 @@ namespace LIP
 
 		protected override void OnStart ()
 		{
-			// Handle when your app starts
-		}
+            // Handle when your app starts
+            Localization.Current.CurrentCultureInfo = Localization.Current.GetCultureInfo("es-AR");
+        }
 
 		protected override void OnSleep ()
 		{
