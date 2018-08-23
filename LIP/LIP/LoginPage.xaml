@@ -12,10 +12,10 @@
             <BoxView>
                 
             </BoxView>
-            <StackLayout Padding="5" Orientation="Horizontal" HorizontalOptions="Fill" BackgroundColor="#EBEBEB">
+            <StackLayout Padding="5" HorizontalOptions="FillAndExpand" Orientation="Horizontal"  BackgroundColor="#EBEBEB">
                 <Image WidthRequest="30" Source="round_account_circle_24.xml"></Image>
                 <Entry  x:Name="txtCedula"
-                        HorizontalOptions="Fill"
+                        HorizontalOptions="FillAndExpand"
                         HorizontalTextAlignment="Center" Placeholder="Ingrese credenciales" 
                         BackgroundColor="#EBEBEB" 
                         TextColor="Gray"></Entry>

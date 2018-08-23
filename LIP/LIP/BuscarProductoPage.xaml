@@ -18,7 +18,7 @@
                 <Button Text="Diferencias"  FontSize="Micro"  HorizontalOptions="CenterAndExpand" Image="sharp_report_problem_24.xml"  x:Name="btnDiferencias" Clicked="btnDiferencias_Clicked" ></Button>
             </StackLayout>
         <StackLayout Margin="2,2,2,2" VerticalOptions="Center">
-            <SearchBar  BackgroundColor="#F4F4F4" HeightRequest="35.0" Placeholder="Buscar Productos" TextColor="Black" PlaceholderColor="WhiteSmoke" x:Name="btnBusqueda" TextChanged="Entry_TextChanged" ></SearchBar>
+            <SearchBar  BackgroundColor="#354B60" HeightRequest="35.0" Placeholder="Buscar Productos" TextColor="White" PlaceholderColor="WhiteSmoke" x:Name="btnBusqueda" TextChanged="Entry_TextChanged" ></SearchBar>
         </StackLayout>
         <Image x:Name="imgResultado" Source="NoFound.png" HorizontalOptions="Center" HeightRequest="100"></Image>
         <!--<Entry Placeholder="Buscar Producto" TextChanged="Entry_TextChanged" HorizontalTextAlignment="Center"></Entry>-->
@@ -44,7 +44,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button HorizontalOptions="CenterAndExpand" Text="Cerrar Estante" Clicked="Button_Clicked" Image="sharp_https_24.xml" StyleClass="Danger"></Button>
+        <Button HorizontalOptions="FillAndExpand" Text="Cerrar Estante" Clicked="Button_Clicked" Image="sharp_https_24.xml" StyleClass="Danger"></Button>
     </StackLayout>
  
 </ContentPage>
