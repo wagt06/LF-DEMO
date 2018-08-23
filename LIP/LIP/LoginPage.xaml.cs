@@ -26,13 +26,15 @@ namespace LIP
         public LoginPage()
         {
             InitializeComponent();
+            NavigationPage.SetHasNavigationBar(this, false);
         }
 
         private void btnLogin_ClickedAsync(object sender, EventArgs e)
         {
             this.IsBusy = true;
 
-           if (!RevisarConexion()){
+            if (!RevisarConexion())
+            {
                 Acr.UserDialogs.UserDialogs.Instance.Toast("Conectese a la red WIFI!");
                 return;
             }
@@ -43,14 +45,16 @@ namespace LIP
                 Task.Run(() => this.IniciarSessionAsync()
                 );
             }
-            else {
+            else
+            {
                 toast.ShowToastMessage("Escriba sus datos para iniciar Sessión!");
                 this.txtCedula.Focus();
             }
-          
+
 
         }
-        private Boolean RevisarConexion() {
+        private Boolean RevisarConexion()
+        {
 
             ConnectivityManager connectivityManager = (ConnectivityManager)Android.App.Application.Context.GetSystemService(Context.ConnectivityService);
             NetworkInfo activeConnection = connectivityManager.ActiveNetworkInfo;
@@ -58,7 +62,8 @@ namespace LIP
 
         }
 
-        private  void IniciarSessionAsync() {
+        private void IniciarSessionAsync()
+        {
             try
             {
 
@@ -73,14 +78,15 @@ namespace LIP
                 if (Resultado.Code == 1) //Repuesta desde Servidor
                 {
 
-                    if (Resultado.Objeto != null) {
-                  
+                    if (Resultado.Objeto != null)
+                    {
+
                         usuario = JsonConvert.DeserializeObject<Entidades.Auth>(Resultado.Objeto.ToString());
                         usuario.Conteo = usuario.Conteo - 1;
                         var f = new MainPage();
                         usuario.Cedula = this.txtCedula.Text;
                         f.Usuario = usuario;
-                       
+
                         f.VienededeLogin = true;
 
                         f.Lista = Resultado.Lista;
@@ -101,14 +107,14 @@ namespace LIP
                             var usu = new Entidades.Auth();
                             usu = bd.GetAllLevantado(txtCedula.Text);
 
-                            
+
                             if (usuario != null)
                             {
                                 var f = new MainPage();
                                 f.bEnSession = true;
                                 f.Usuario = usuario;
                                 f.VienededeLogin = true;
-                                 f.CargarDatos();
+                                f.CargarDatos();
 
                                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                                 Device.BeginInvokeOnMainThread(async () =>
@@ -116,7 +122,7 @@ namespace LIP
                                     await this.Navigation.PushAsync(f, true);
                                 });
                             }
-                            else 
+                            else
                             {
                                 Session = false;
                                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
@@ -129,7 +135,7 @@ namespace LIP
                             }
                         }
                     }
-                    
+
                 }
                 if (Resultado.Code == 4)//Encontrado en BD
                 {
@@ -137,7 +143,7 @@ namespace LIP
                     f.bEnSession = true;
                     f.Usuario = (Entidades.Auth)Resultado.Objeto;
                     f.VienededeLogin = true;
-                   
+
                     f.CargarDatos();
 
                     Acr.UserDialogs.UserDialogs.Instance.HideLoading();
@@ -160,9 +166,9 @@ namespace LIP
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("LIP",Resultado.Response != "" ? Resultado.Response : "Ocurrio un error de Conexion con el Servidor", "Aceptar");
-                    Acr.UserDialogs.UserDialogs.Instance.HideLoading();
-                    return;
+                        await DisplayAlert("LIP", Resultado.Response != "" ? Resultado.Response : "Ocurrio un error de Conexion con el Servidor", "Aceptar");
+                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        return;
                     });
                 }
                 this.IsBusy = false;
@@ -173,14 +179,22 @@ namespace LIP
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                   await  DisplayAlert("LIP", "Ocurrio un Error", "Ok");
+                    await DisplayAlert("LIP", "Ocurrio un Error", "Ok");
                     return;
 
                 });
-               
-               // throw;
+
+                // throw;
             }
 
+        }
+
+
+       
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            NavigationPage.SetHasNavigationBar(this, false);
         }
     }
 }

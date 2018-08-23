@@ -23,9 +23,6 @@ namespace LIP
 		{
 			InitializeComponent ();
             this.imgScanner.GestureRecognizers.Add(new TapGestureRecognizer { Command = new Command (() => { TapImgScannerAsync(); }), NumberOfTapsRequired = 1 });
-            
-      
-         
 		}
 
         public void Cargar() {

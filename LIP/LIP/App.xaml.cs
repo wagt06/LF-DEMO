@@ -13,6 +13,7 @@ namespace LIP
 			InitializeComponent();
 
             NavigationPage Nav = new NavigationPage(new LoginPage());
+            Nav.BarBackgroundColor = Color.FromRgb(53, 75, 96);
             Nav.Popped += (sender, e) => {
             };
             //MainPage = new NavigationPage(new MainPage());
@@ -25,6 +26,7 @@ namespace LIP
 		{
             // Handle when your app starts
             Localization.Current.CurrentCultureInfo = Localization.Current.GetCultureInfo("es-NI");
+
         }
 
 		protected override void OnSleep ()

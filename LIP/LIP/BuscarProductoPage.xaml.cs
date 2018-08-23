@@ -31,6 +31,7 @@ namespace LIP
         {
             InitializeComponent();
             this.lvwProductos.ItemsSource = db.GetAllProd();
+            
             buttonSelect = 1;
         }
 
@@ -38,7 +39,7 @@ namespace LIP
         {
             var sizeBtn = new double();
             var conteo = Usuario.Conteo.ToString() == "0" ? " Inicial " : Usuario.Conteo.ToString();
-            this.tbDatos.Text = "Conteo : " + conteo + " Estante : " + Usuario.NombreUbicacion;
+            this.tbDatos.Text = "Conteo : " + conteo + "   Ubicación : " + Usuario.NombreUbicacion;
             tap = 0;
             this.btnDiferencias.IsVisible = Usuario.Conteo > 0 ? true : false;
             if (this.btnDiferencias.IsEnabled == false)
@@ -53,6 +54,10 @@ namespace LIP
             btnInventario.WidthRequest = sizeBtn;
             btnContados.WidthRequest = sizeBtn;
             btnDiferencias.WidthRequest = sizeBtn;
+
+            this.imgResultado.IsVisible = false;
+            this.imgResultado.HeightRequest = 0;
+
             btnInventario_Clicked(null, null);
         }
 
@@ -147,6 +152,16 @@ namespace LIP
                             Device.BeginInvokeOnMainThread(() =>
                             {
                                 this.lvwProductos.ItemsSource = listContado;
+                                if (listContado.Count <= 0)
+                                {
+                                    this.imgResultado.IsVisible = true;
+                                    this.imgResultado.HeightRequest = 100;
+                                }
+                                else
+                                {
+                                    this.imgResultado.IsVisible = false;
+                                    this.imgResultado.HeightRequest = 0;
+                                }
                             });
 
                         }
@@ -160,10 +175,20 @@ namespace LIP
                             Device.BeginInvokeOnMainThread(() =>
                             {
                                 this.lvwProductos.ItemsSource = listDiferencias;
+
+                                if (listDiferencias.Count <= 0)
+                                {
+                                    this.imgResultado.IsVisible = true;
+                                    this.imgResultado.HeightRequest = 100;
+                                }
+                                else {
+                                    this.imgResultado.IsVisible = false;
+                                    this.imgResultado.HeightRequest = 0;
+                                }
+                               
                             });
 
                         }
-
                     }
                     else
                     {
@@ -171,6 +196,8 @@ namespace LIP
                         Device.BeginInvokeOnMainThread(() =>
                         {
                             this.lvwProductos.ItemsSource = new List<Productos>();
+                            this.imgResultado.IsVisible = true;
+                            this.imgResultado.HeightRequest = 100;
                         });
 
                     }
@@ -179,9 +206,14 @@ namespace LIP
             }
             catch (Exception)
             {
+            
                 Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    this.imgResultado.IsVisible = false;
+                    this.imgResultado.HeightRequest = 0;
+                });
                 return;
-                // throw;
             }
 
 
@@ -271,6 +303,7 @@ namespace LIP
             }
 
         }
+
         private void ClickVerDetalle(object sender, EventArgs e)
         {
             try
@@ -311,6 +344,7 @@ namespace LIP
 
         }
 
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -321,23 +355,22 @@ namespace LIP
                 Usuario = db.GetAllLevantado(Usuario.Cedula);
                 if (Usuario.Codigo_Ubicacion == 0)
                 {
-                    this.btnBusqueda.Text = "";
                     Navigation.PopAsync(true);
                 }
 
                 if (buttonSelect == 3)
                 {
-                    this.btnBusqueda.Text = "";
                     btnDiferencias_Clicked(null, null);
                 }
                 if (buttonSelect == 2)
                 {
-                    this.btnBusqueda.Text = "";
                     btnContados_Clicked(null, null);
                 }
+                this.btnBusqueda.Text = "";
             }
             catch (Exception)
             {
+
                 return;
                 //throw;
             }
@@ -352,6 +385,8 @@ namespace LIP
             btnContados.BackgroundColor = Color.LightGray;
             btnInventario.BackgroundColor = Color.LightGray;
             Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Refrescando!", Acr.UserDialogs.MaskType.Clear);
+            this.imgResultado.IsVisible = false;
+            this.imgResultado.HeightRequest = 0;
             Task.Run(() => CargarProductosContados());
         }
 
@@ -365,6 +400,8 @@ namespace LIP
             btnInventario.BackgroundColor = Color.LightGray;
 
             Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Refrescando!", Acr.UserDialogs.MaskType.Clear);
+            this.imgResultado.IsVisible = false;
+            this.imgResultado.HeightRequest = 0;
             Task.Run(() => CargarProductosContados());
 
         }
@@ -377,7 +414,17 @@ namespace LIP
             btnDiferencias.BackgroundColor = Color.LightGray;
             btnContados.BackgroundColor = Color.LightGray;
             var list = new List<Productos>();
-            this.lvwProductos.ItemsSource = this.db.GetAllProd();
+            list = this.db.GetAllProd();
+            this.lvwProductos.ItemsSource = list;
+            if (list.Count <= 0)
+            {
+                this.imgResultado.IsVisible = true;
+                this.imgResultado.HeightRequest = 100;
+            }
+            else {
+                this.imgResultado.IsVisible = false;
+                this.imgResultado.HeightRequest = 0;
+            }
         }
 
     }

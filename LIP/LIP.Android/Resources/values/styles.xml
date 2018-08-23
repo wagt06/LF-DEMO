@@ -2,9 +2,12 @@
 <resources>
 
   <style name="MainTheme" parent="MainTheme.Base">
+    <item name="android:windowFullscreen">true</item>
+    <item name="colorControlNormal">#FFFFFF</item>
   </style>
   <!-- Base theme applied no matter what API -->
   <style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="colorControlNormal">#FFFFFF</item>
     <!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
     <item name="windowNoTitle">true</item>
     <!--We will be using the toolbar so no need to show ActionBar-->
@@ -16,15 +19,17 @@
     <item name="colorPrimaryDark">#1976D2</item>
     <!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->
-    <item name="colorAccent">#FF4081</item>
+    <item name="colorAccent">#02A83D</item>
     <!-- You can also set colorControlNormal, colorControlActivated
          colorControlHighlight and colorSwitchThumbNormal. -->
     <item name="windowActionModeOverlay">true</item>
-
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-    <item name="colorAccent">#FF4081</item>
+    <!--  <item name="colorAccent">#FF4081</item>  02A83D-->
+    <item name="colorAccent">#02A83D</item>  
+    <item name="colorControlNormal">#FFFFFF</item>
+
   </style>
 </resources>
