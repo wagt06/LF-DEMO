@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local1="clr-namespace:LIP.CustomRenders"
              x:Class="LIP.IgresarProductosPage">
 
     <ContentPage.ToolbarItems >
@@ -9,8 +10,12 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            
-            <StackLayout Margin="5" Padding="5" BackgroundColor="#EEEEEE">
+            <StackLayout Orientation="Horizontal" Margin="5,5,5,-6" Padding="10" BackgroundColor="#537596">
+                <Image WidthRequest="30" Source="sharp_shopping_basket_24.xml"></Image>
+                <Label Text="Descripción del Producto" TextColor="White"></Label>
+            </StackLayout>
+
+            <StackLayout Margin="5,-6,5,0" Padding="5" BackgroundColor="#D1D5D9">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -20,19 +25,22 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Label Text="Nombre:" TextColor="Gray" Grid.Row="0" Grid.Column="0"></Label>
-                    <Label x:Name="lblNombre" TextColor="Black" FontSize="20"  Grid.Row="0" Grid.Column="1" ></Label>
-                    <Label Text="Codigo:" TextColor="Gray" Grid.Row="1" Grid.Column="0"></Label>
-                    <Label Text="" x:Name="btnCodigo" TextColor="Black" FontSize="20" Grid.Row="1" Grid.Column="1"></Label>
+                    <Label Text="Nombre:" TextColor="#354B60" Grid.Row="0" Grid.Column="0"></Label>
+                    <Label x:Name="lblNombre" TextColor="Gray" FontSize="20"  Grid.Row="0" Grid.Column="1" ></Label>
+                    <Label Text="Codigo:" TextColor="#354B60" Grid.Row="1" Grid.Column="0"></Label>
+                    <Label Text="" x:Name="btnCodigo" TextColor="Gray" FontSize="20" Grid.Row="1" Grid.Column="1"></Label>
                 </Grid>
             </StackLayout>
 
-            <StackLayout Margin="5" Padding="5" BackgroundColor="#EEEEEE" >
-                <Label Text="Ingrese la Cantidad de Productos"
-                VerticalOptions="Center"
-                FontSize="20"
-                HorizontalOptions="CenterAndExpand" TextColor="Black" FontAttributes="Bold" />
-                <Entry Margin="0,20,0,0" FontSize="40" HorizontalTextAlignment="Center" Keyboard="Numeric" x:Name="txtCantidad" BackgroundColor="AliceBlue" ReturnType="Go"></Entry>
+            <StackLayout Margin="5" Padding="10" BackgroundColor="#EEEEEE" >
+                <StackLayout Margin="-6,-6,-6,0" Padding="5" BackgroundColor="#537596" Orientation="Horizontal">
+                    <Image WidthRequest="30" Source="outline_assignment_24.xml"></Image>
+                    <Label Text="Ingrese la Cantidad de Productos"
+                    TextColor="White"/>  
+                </StackLayout>
+
+
+                <local1:MyEntry Margin="0,20,0,0" Placeholder="Cantidad" PlaceholderColor="#808080" FontSize="40" HorizontalTextAlignment="Center" Keyboard="Numeric" x:Name="txtCantidad" BackgroundColor="White" ReturnType="Go"></local1:MyEntry>
             </StackLayout>
             <StackLayout Margin="5" Padding="5" StyleClass="Success">
                 <Image WidthRequest="500"  Source="codebar1.png"  x:Name="imgScanner"></Image>

@@ -128,7 +128,7 @@ namespace LIP
                 try
                 {
                     //g = Guar
-                    var g = await DisplayAlert(@"LIP Guardar Producto ", " Producto: " + this.NombreProducto + "\n\r"
+                    var g = await DisplayAlert(@"LIP Guardar Producto ", "Producto: " + this.NombreProducto + "\n\r"
                                                                   + "Cantidad :" + this.txtCantidad.Text + "\n\r"
                                                                   , "Guardar", "Cancelar");
                     //su guardar es cancelado
@@ -154,7 +154,7 @@ namespace LIP
                         var respuesta = await Acr.UserDialogs.UserDialogs.Instance.PromptAsync(@"ya tiene conteo de " + producto.Resultado + "\n\r"
                                                                                               + "que monto desea Guardar?. Digite la Opción " + "\n\r" +
                                                                                                 "1 = " + pro.Resultado + "\n\r" +
-                                                                                                "2 = " + producto.Resultado + "\n\r","LIP - Los Paisas","Guardar","Cancelar", "Escribe la Opción", Acr.UserDialogs.InputType.Default);
+                                                                                                "2 = " + producto.Resultado + pro.Resultado  + "\n\r","LIP - Los Paisas","Guardar","Cancelar", "Escribe la Opción", Acr.UserDialogs.InputType.Default);
 
 
                         //var respuesta = await DisplayAlert(@" LIP Producto Contado", " ya tiene conteo de " + producto.Resultado + "\n\r"

@@ -27,6 +27,7 @@ namespace LIP
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
+    
         }
 
         private void btnLogin_ClickedAsync(object sender, EventArgs e)

@@ -10,37 +10,38 @@
         <ToolbarItem Name="ActEstantes" Clicked="ActEstantes_Clicked" Icon="sharp_history_24.xml" Priority="0" Order="Default"></ToolbarItem>
         <ToolbarItem Name="CerrarSession" Clicked="CerrarSession_Clicked" Icon="outline_power_settings_new_24.xml" Priority="1" Order="Secondary"></ToolbarItem>
     </ContentPage.ToolbarItems>
-    <StackLayout Padding="20">
+    
+    <StackLayout Padding="10">
         <!-- Place new controls here -->
 
 
-        <StackLayout BackgroundColor="#A2A2A2" Padding="5" Margin="0">
+        <StackLayout BackgroundColor="#537596" Padding="5" Margin="0,5,0,0"  Orientation="Horizontal">
+            <Image WidthRequest="30" Source="outline_assignment_24.xml"></Image>
             <Label Text="Datos de Levantado " TextColor="White"></Label>
         </StackLayout>
-        <StackLayout Padding="10,0,20,30" Margin="0" BackgroundColor="LightGray">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-            </Grid>
-            <Label FontAttributes="Bold" 
-                   Grid.Row="0" Grid.Column="0" Text="Usuario: "/>
-            <Label Grid.Row="1" Grid.Column="0"  x:Name="lblUsuario" />
-            <Label FontAttributes="Bold"  
-                   Grid.Row="2" Grid.Column="0" Text="Sucursal: "/>
-            <Label Grid.Row="2" Grid.Column="1"  x:Name="lblSucursal" />
-            <Label FontAttributes="Bold" 
-                   Grid.Row="3" Grid.Column="0" Text="Bodega: "/>
-            <Label Grid.Row="3" Grid.Column="1"  x:Name="lblBodega" />
-            <Label FontAttributes="Bold" 
-                   Grid.Row="4" Grid.Column="0" Text="Estante Actual: "/>
-            <Label Grid.Row="4" Grid.Column="1"  x:Name="lblEstante" />
+
+        <StackLayout BackgroundColor="#D1D5D9" Padding="5" Margin="0,-6,0,0" >
+            <StackLayout Orientation="Vertical" Padding="5">
+                <Label FontAttributes="Bold" TextColor="#354B60" Text="Usuario: "/>
+                <Label x:Name="lblUsuario" />
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" Padding="5">
+                <Label FontAttributes="Bold" TextColor="#354B60"  Text="Bodega: "/>
+                <Label   x:Name="lblBodega" />
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" Padding="5">
+                <Label FontAttributes="Bold" TextColor="#354B60" Text="Sucursal: "/>
+                <Label x:Name="lblSucursal" />
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" Padding="5">
+                <Label FontAttributes="Bold" TextColor="#354B60" Text="Estante Actual:"/>
+                <Label  x:Name="lblEstante"/>
+            </StackLayout>
         </StackLayout>
+
 
         <Picker SelectedIndexChanged="Estantes_SelectedIndexChanged"
                 HorizontalOptions="Fill" FontSize="Large" 

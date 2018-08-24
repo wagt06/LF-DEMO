@@ -99,7 +99,7 @@ namespace LIP
                     this.btnContar.Text = "Seguir Contando ";
                     this.btnContar.IsVisible = true;
                     this.Estantes.IsVisible = false;
-                    this.lblEstante.Text = " Cod: " + Usuario.Codigo_Ubicacion.ToString() + "| Nombre: " + Usuario.NombreUbicacion;
+                    this.lblEstante.Text = Usuario.Codigo_Ubicacion.ToString() + " - " + Usuario.NombreUbicacion;
                 }
                 else
                 {

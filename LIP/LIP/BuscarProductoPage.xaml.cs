@@ -77,6 +77,10 @@ namespace LIP
                 if (respuesta == true)
                 {
                     var resp = await Acr.UserDialogs.UserDialogs.Instance.PromptAsync("Ingrese su credencial para confirmar", "LIP", "Cerrar Estante", "Cancelar", "Tus Credenciales", Acr.UserDialogs.InputType.Default);
+                    if (!resp.Ok) {
+                        return;
+                    }
+
                     if (resp.Text.ToUpper().Trim() == Usuario.Cedula.ToUpper().Trim())
                     {
                         var estantes = new Services.EstantesServices();
@@ -381,7 +385,7 @@ namespace LIP
         {
             buttonSelect = 3;
             var colorDefecto = btnDiferencias.BackgroundColor;
-            btnDiferencias.BackgroundColor = Color.DarkRed;
+            btnDiferencias.BackgroundColor = Color.FromRgb(66, 158, 66);
             btnContados.BackgroundColor = Color.LightGray;
             btnInventario.BackgroundColor = Color.LightGray;
             Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Refrescando!", Acr.UserDialogs.MaskType.Clear);
@@ -395,7 +399,7 @@ namespace LIP
         {
             buttonSelect = 2;
             var colorDefecto = btnContados.BackgroundColor;
-            btnContados.BackgroundColor = Color.DarkRed;
+            btnContados.BackgroundColor = Color.FromRgb(66, 158, 66);
             btnDiferencias.BackgroundColor = Color.LightGray;
             btnInventario.BackgroundColor = Color.LightGray;
 
@@ -410,7 +414,7 @@ namespace LIP
         {
             buttonSelect = 1;
             var colorDefecto = btnInventario.BackgroundColor;
-            btnInventario.BackgroundColor = Color.DarkRed;
+            btnInventario.BackgroundColor = Color.FromRgb(66, 158, 66);
             btnDiferencias.BackgroundColor = Color.LightGray;
             btnContados.BackgroundColor = Color.LightGray;
             var list = new List<Productos>();

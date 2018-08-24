@@ -1,24 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local1="clr-namespace:LIP.CustomRenders"
              x:Class="LIP.LoginPage"
              >
     <ContentPage.Content >
-        <StackLayout Padding="10" Margin="0,40,0,0" VerticalOptions="Center">
+        <StackLayout Padding="10" Margin="0,20,0,0" VerticalOptions="Center">
             <!--<Image  WidthRequest="100" Source="Cuaderno.jpg"></Image>-->
             <Image HeightRequest="100" WidthRequest="100" Source="IconApp.jpg"></Image>
             <Label FontSize="25" Text="LIP" HorizontalOptions="CenterAndExpand" />
             <Label Text="Levantado de Inventario Paisas " HorizontalOptions="CenterAndExpand" />
-            <BoxView>
-                
-            </BoxView>
-            <StackLayout Padding="5" HorizontalOptions="FillAndExpand" Orientation="Horizontal"  BackgroundColor="#EBEBEB">
+            <StackLayout Padding="10,2,10,2" HorizontalOptions="FillAndExpand" Orientation="Horizontal"  BackgroundColor="#EBEBEB">
                 <Image WidthRequest="30" Source="round_account_circle_24.xml"></Image>
-                <Entry  x:Name="txtCedula"
+                <local1:MyEntry   x:Name="txtCedula"
                         HorizontalOptions="FillAndExpand"
                         HorizontalTextAlignment="Center" Placeholder="Ingrese credenciales" 
                         BackgroundColor="#EBEBEB" 
-                        TextColor="Gray"></Entry>
+                        
+                        TextColor="Gray"></local1:MyEntry>
             </StackLayout>
  
             <Button StyleClass="Success" Clicked="btnLogin_ClickedAsync" x:Name="btnLogin" BorderRadius="5" Margin="0,10,0,0" Text="Iniciar Sesion "></Button>
