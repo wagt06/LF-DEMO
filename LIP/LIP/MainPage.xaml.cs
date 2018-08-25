@@ -32,13 +32,17 @@ namespace LIP
         {
             InitializeComponent();
             var c = new Conexion();
+            //this..GestureRecognizers.Add(new TapGestureRecognizer { Command = new Command(() => { TapImgScannerAsync(); }), NumberOfTapsRequired = 1 });
+            this.imgPicker.GestureRecognizers.Add(new TapGestureRecognizer {  Command = new Command(()=> { EncentoPicker(); }),NumberOfTapsRequired = 1});
+        }
 
-
+        private void EncentoPicker()
+        {
+            this.Estantes.Focus();
         }
 
         public Boolean CargarDatos()
         {
-            
             try
             {
                 cargarCombo = true;
@@ -66,10 +70,9 @@ namespace LIP
                     Lista = Respuesta.Lista;
                     Usuario.Conteo = (int.Parse(Conteo)) - 1;
                     Usuario.Codigo_Ubicacion = 0;
+                    Usuario.NombreUbicacion = "";
                     bd.EjecutarQueryScalar(string.Format("UPDATE Auth SET  Conteo={0}, isCerrado= 0 ,Codigo_Ubicacion = {2}, NombreUbicacion = {3}  WHERE Codigo_Usuario ={1}", (int.Parse(Conteo) - 1), Usuario.Codigo_Usuario, Usuario.Codigo_Ubicacion, Usuario.NombreUbicacion));
                 }
-
-
                 l.Clear();
 
 
@@ -99,12 +102,14 @@ namespace LIP
                     this.btnContar.Text = "Seguir Contando ";
                     this.btnContar.IsVisible = true;
                     this.Estantes.IsVisible = false;
-                    this.lblEstante.Text = Usuario.Codigo_Ubicacion.ToString() + " - " + Usuario.NombreUbicacion;
+                    this.imgPicker.IsVisible = false;
+                    this.lblEstante.Text =  Usuario.NombreUbicacion;
                 }
                 else
                 {
                     this.Estantes.IsVisible = true;
                     this.btnContar.IsVisible = false;
+                    this.imgPicker.IsVisible = true;
                     this.btnContar.Text = "Iniciar Conteo";
                     this.lblEstante.Text = "Estante No Seleccionado";
                 }
@@ -171,6 +176,7 @@ namespace LIP
 
 
             item = Usuario;
+            item.NombreUbicacion = r.Nombre;
             item.Codigo_Ubicacion = r.Codigo_Ubicacion;
 
             Respuesta = Servicio.SeleccionarEstantes(item);

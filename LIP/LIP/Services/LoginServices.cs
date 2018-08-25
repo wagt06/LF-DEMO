@@ -31,7 +31,6 @@ namespace LIP.Services
 
                     if (Resp.Lista != null)
                     {
-                       
                         user.Conteo =  user.Conteo > 0 ? user.Conteo - 1: user.Conteo;
                         bd.SaveLevantado(user);
                     }

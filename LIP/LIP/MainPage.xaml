@@ -20,7 +20,7 @@
             <Label Text="Datos de Levantado " TextColor="White"></Label>
         </StackLayout>
 
-        <StackLayout BackgroundColor="#D1D5D9" Padding="5" Margin="0,-6,0,0" >
+        <StackLayout BackgroundColor="#EBEBEB" Padding="5" Margin="0,-6,0,0" >
             <StackLayout Orientation="Vertical" Padding="5">
                 <Label FontAttributes="Bold" TextColor="#354B60" Text="Usuario: "/>
                 <Label x:Name="lblUsuario" />
@@ -43,14 +43,23 @@
         </StackLayout>
 
 
-        <Picker SelectedIndexChanged="Estantes_SelectedIndexChanged"
-                HorizontalOptions="Fill" FontSize="Large" 
+        <StackLayout x:Name="lUbicaiones1" BackgroundColor="#537596" Padding="5" Margin="0,5,0,0"  Orientation="Horizontal">
+            <Image WidthRequest="30" Source="outline_assignment_24.xml"></Image>
+            <Label Text="Ubicaciones" TextColor="White"></Label>
+        </StackLayout>
+
+        <StackLayout  x:Name="lUbicaiones2" Margin="0,-6,0,0" Padding="10" Orientation="Horizontal"  HorizontalOptions="FillAndExpand"  BackgroundColor="#EBEBEB">
+            <Picker SelectedIndexChanged="Estantes_SelectedIndexChanged"
+                HorizontalOptions="FillAndExpand" FontSize="Large" 
                 Title="Seleccionar Estantes" x:Name="Estantes"
                 ItemsSource="{Binding listas}"
                 ItemDisplayBinding="{Binding Nombre}"
                 SelectedItem="{Binding Seleccionada}"
                 >
-        </Picker>
+            </Picker>
+            <Image x:Name="imgPicker" WidthRequest="30" Source="round_keyboard_arrow_down_24.xml"></Image>
+        </StackLayout>
+      
 
         <StackLayout Margin="0,50,0,0">
             <Button x:Name="btnContar" Text="Comenzar Levantado" StyleClass="Primary" Image="sharp_shopping_basket_24.xml"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Clicked="Button_Clicked">

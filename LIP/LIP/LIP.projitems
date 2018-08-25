@@ -22,6 +22,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Conexion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConfPages\ConfPage.xaml.cs">
+      <DependentUpon>ConfPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomRenders\MyButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenders\MyEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccess.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DetalleConteoProductoPage.xaml.cs">
@@ -29,6 +34,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\Auth.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entidades\Conf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\DetalleEstante.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\Lista.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entidades\ListaProductos.cs" />
@@ -52,6 +58,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\LoginServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ProductosServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ServicesApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Utilidades.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SqliteService .cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +86,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)CustomRenders\" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ConfPages\ConfPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

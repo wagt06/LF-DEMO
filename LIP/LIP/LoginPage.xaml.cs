@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
-using System.IO;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Plugin.Toast;
 using Newtonsoft.Json;
-using Android.Net;
-
-using Android.App;
-using Android.Content;
-using Java.Net;
+using LIP.Services;
 
 namespace LIP
 {
@@ -27,20 +18,36 @@ namespace LIP
         {
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
-    
+            //this.imgPicker.GestureRecognizers.Add(new TapGestureRecognizer { Command = new Command(() => { EncentoPicker(); }), NumberOfTapsRequired = 1 });
+            this.imgLogin.GestureRecognizers.Add(new  TapGestureRecognizer { Command = new Command(() => {
+                Conf();
+            }), NumberOfTapsRequired = 2, });
+
+        }
+        private void Conf() {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var f = new ConfPages.ConfPage();
+                await this.Navigation.PushModalAsync(f, true);
+            });
         }
 
         private void btnLogin_ClickedAsync(object sender, EventArgs e)
         {
             this.IsBusy = true;
 
-            if (!RevisarConexion())
+            if (!Utilidades.RevisarConexion())
             {
                 Acr.UserDialogs.UserDialogs.Instance.Toast("Conectese a la red WIFI!");
                 return;
             }
 
-            if (this.txtCedula.Text != "" || this.txtCedula.Text.Length > 0)
+            if (!Utilidades.ConexionServerAsync()) {
+                Acr.UserDialogs.UserDialogs.Instance.Toast("No hay Conexion con el server!");
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(this.txtCedula.Text))
             {
                 Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Iniciando Session!", Acr.UserDialogs.MaskType.Clear);
                 Task.Run(() => this.IniciarSessionAsync()
@@ -54,14 +61,7 @@ namespace LIP
 
 
         }
-        private Boolean RevisarConexion()
-        {
-
-            ConnectivityManager connectivityManager = (ConnectivityManager)Android.App.Application.Context.GetSystemService(Context.ConnectivityService);
-            NetworkInfo activeConnection = connectivityManager.ActiveNetworkInfo;
-            return (activeConnection != null) && activeConnection.IsConnected;
-
-        }
+   
 
         private void IniciarSessionAsync()
         {

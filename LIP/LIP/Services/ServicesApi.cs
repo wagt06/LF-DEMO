@@ -54,17 +54,14 @@ namespace LIP.Services
         {
             try
             {
-                URL_API = "192.168.1.9";
+               // URL_API = "192.168.1.9";
+                URL_API = App.Current.Properties["Direccion"].ToString();
                 string content;
-                HttpWebResponse Respuesta;
-
-
                 var rxcui = "198440";
                 var request = HttpWebRequest.Create(string.Format("http://"+ URL_API + Controlador, rxcui));
                 request.ContentType = "application/json";
                 request.Method = "POST";
                 request.Timeout = 10000;
-                //request.ContentType = "Application/x-www-form-urlencoded";
                 using (System.IO.Stream s = request.GetRequestStream())
                 {
                     using (System.IO.StreamWriter sw = new System.IO.StreamWriter(s))
