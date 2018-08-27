@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace LIP.CustomRenders
 {
-    class MyButton:Button
+    public class MyButton:Button
     {
     }
 }

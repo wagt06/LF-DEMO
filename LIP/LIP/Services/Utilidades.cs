@@ -1,28 +1,31 @@
 ﻿using Android.Content;
 using Android.Net;
 using Java.Net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
+using Xamarin.Forms;
 
 namespace LIP.Services
 {
    public static class Utilidades
     {
+        
         public static Boolean RevisarConexion()
         {
             ConnectivityManager connectivityManager = (ConnectivityManager)Android.App.Application.Context.GetSystemService(Context.ConnectivityService);
             NetworkInfo activeConnection = connectivityManager.ActiveNetworkInfo;
             var r = (activeConnection.Type == Android.Net.ConnectivityType.Wifi) && activeConnection.IsConnected;
-            if (!r) {
-                r = ConexionServerAsync();
-            }
             return r;
         }
 
         public static bool ConexionServerAsync()
         {
+            Boolean Respuesta = new Boolean();
+            Services.ServicesApi Ser = new Services.ServicesApi();
             try
             {
                 var bd = new DataAccess();
@@ -34,19 +37,23 @@ namespace LIP.Services
                         App.Current.Properties["Direccion"] = direccion;
                     }
                 }
-                URL myUrl = new URL("http://"+ direccion);
-                URLConnection connection = myUrl.OpenConnection();
-                connection.ConnectTimeout = 3000;
-                connection.ConnectAsync();
-                return true;
+                    var resp = JsonConvert.DeserializeObject<Entidades.Respuesta>(Ser.PeticionPost("/lip/api/login/login", ""));
+                    Respuesta = resp != null ?true:false;
+                return Respuesta;
             }
             catch
             {
-                return false;
+                return Respuesta;
             }
         }
 
-      
+        public static decimal TruncateDecimal(decimal value, int precision)
+        {
+            decimal step = (decimal)Math.Pow(10, precision);
+            decimal tmp = Math.Truncate(step * value);
+            return tmp / step;
+        }
+
 
     }
 }

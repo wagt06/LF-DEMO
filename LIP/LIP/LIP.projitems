@@ -26,6 +26,7 @@
       <DependentUpon>ConfPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomRenders\CustomViewCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenders\MyButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomRenders\MyEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataAccess.cs" />

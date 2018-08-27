@@ -4,7 +4,6 @@
   <style name="MainTheme" parent="MainTheme.Base">
     <item name="android:windowFullscreen">true</item>
     <item name="colorControlNormal">#FFFFFF</item>
-    <item name="android:colorActivatedHighlight">#F0F0F0</item>
   </style>
   <!-- Base theme applied no matter what API -->
   <style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -25,14 +24,13 @@
          colorControlHighlight and colorSwitchThumbNormal. -->
     <item name="windowActionModeOverlay">true</item>
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
-    <item name="android:colorActivatedHighlight">#F0F0F0</item>
+    <item name="android:colorActivatedHighlight">#0AB31C</item>
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
     <!--  <item name="colorAccent">#FF4081</item>  02A83D-->
     <item name="colorAccent">#02A83D</item>  
     <item name="colorControlNormal">#FFFFFF</item>
-    <item name="android:colorActivatedHighlight">#F0F0F0</item>
 
   </style>
 </resources>

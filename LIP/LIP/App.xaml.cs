@@ -19,7 +19,7 @@ namespace LIP
             //MainPage = new NavigationPage(new MainPage());
             MainPage = Nav;
             Acr.UserDialogs.UserDialogs.Init(() => (Android.App.Activity)Forms.Context);
-     
+            Acr.UserDialogs.ToastConfig.DefaultDuration = System.TimeSpan.FromMilliseconds(5000);
         }
 
 		protected override void OnStart ()

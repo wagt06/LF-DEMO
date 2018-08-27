@@ -5,7 +5,7 @@
 
     <StackLayout Margin="20">
         <StackLayout Padding="10" BackgroundColor="DarkGray" Orientation="Horizontal">
-            <Label Text="Estante" WidthRequest="200"  TextColor="White" FontSize="Large" FontAttributes="Bold" />
+            <Label Text="Estante" WidthRequest="200"  TextColor="White" FontSize="Default" FontAttributes="Bold" />
             <Label Text="Cantidad" FontSize="Default" TextColor="White" FontAttributes="Bold"/>
         </StackLayout>
 

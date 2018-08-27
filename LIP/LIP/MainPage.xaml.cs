@@ -135,15 +135,6 @@ namespace LIP
 
         }
 
-        private void Iniciar()
-        {
-
-            // var f = new BuscarProductoPage();
-            //this.Navigation.PushAsync(f,true);
-            // Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Iniciando Session!", Acr.UserDialogs.MaskType.Black);
-
-        }
-
         private void Button_Clicked(object sender, EventArgs e)
         {
             this.VienededeLogin = false;

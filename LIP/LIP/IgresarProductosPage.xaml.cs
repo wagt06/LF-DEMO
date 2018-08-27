@@ -42,20 +42,12 @@ namespace LIP
                 UseFrontCameraIfAvailable = false,
                 TryHarder = true,
                 UseNativeScanning = true,
-                //PossibleFormats = new List<ZXing.BarcodeFormat>
-                //        {
-                //            ZXing.BarcodeFormat.CODABAR,
-                //           ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.EAN_13
-                //        }
                 };
 
 
 
             var pagina = new ZXingScannerPage();
-            pagina.AutoFocus();
-            //pagina.ToggleTorch();
-            //pagina.IsTorchOn = true;
-            //pagina.DefaultOverlayShowFlashButton = true; 
+            pagina.AutoFocus(); 
             pagina.Title = "Escaneando codigo de barra";
 
             await Navigation.PushAsync(pagina);
@@ -152,27 +144,25 @@ namespace LIP
                         var producto = new Entidades.DetalleLevantadoTemp();
                         producto = JsonConvert.DeserializeObject<Entidades.DetalleLevantadoTemp>(Resp.Objeto.ToString());
 
-                        var respuesta = await Acr.UserDialogs.UserDialogs.Instance.PromptAsync(@"ya tiene conteo de " + producto.Resultado + "\n\r"
+                        var respuesta = await Acr.UserDialogs.UserDialogs.Instance.PromptAsync(@"ya tiene conteo de " + TruncateDecimal((decimal)producto.Resultado,2) + "\n\r"
                                                                                               + "que monto desea Guardar?. Digite la Opción " + "\n\r" +
                                                                                                 "1 = " + pro.Resultado + "\n\r" +
-                                                                                                "2 = " + (producto.Resultado + pro.Resultado) + "\n\r","LIP - Los Paisas","Guardar","Cancelar", "Escribe la Opción", Acr.UserDialogs.InputType.Default);
+                                                                                                "2 = " + TruncateDecimal((decimal)(producto.Resultado + pro.Resultado),2) + "\n\r","LIP - Los Paisas","Guardar","Cancelar", "Escribe la Opción", Acr.UserDialogs.InputType.Default);
 
 
-                        //var respuesta = await DisplayAlert(@" LIP Producto Contado", " ya tiene conteo de " + producto.Resultado + "\n\r"
-                        //                                         + " que acción desea realizar?." + "\n\r" +
-                        //                                           " Actualizar = " + pro.Resultado + "\n\r" +
-                        //                                           " Agregar(Sumar) = " + (pro.Resultado + producto.Resultado), "Agregar", "Actualizar");
+                              
                         if (!respuesta.Ok && respuesta.Text !="") {
                             return;
                         }
                         if (respuesta.Text == "1")
                         { //true -> Sobreescribir
-                            monto = pro.Resultado;
+                            monto = (double)TruncateDecimal((decimal)pro.Resultado, 2);
                         }
                         else if (respuesta.Text == "2")
                         {// Agregarla
+                           
                             monto = (pro.Resultado + producto.Resultado);
-                            monto = (float)(Math.Round((double)monto, 2));
+                            monto = (double)TruncateDecimal((decimal)monto,2);
                         }
                         else {
                             return;
@@ -266,10 +256,6 @@ namespace LIP
 
             });
 
-            //await Navigation.PopAsync();
-            //lblResultado.Text = resultado.Text;
-
-
         }
 
         public decimal TruncateDecimal(decimal value, int precision)
@@ -282,7 +268,6 @@ namespace LIP
         private void TapImgScannerAsync() {
 
              this.btnEscanear_Clicked(null, null);  
-            //Acr.UserDialogs.UserDialogs.Instance.Toast("Me distes Click");
         }
     }
 }

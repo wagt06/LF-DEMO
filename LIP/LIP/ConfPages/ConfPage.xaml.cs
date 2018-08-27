@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LIP.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,19 +51,38 @@ namespace LIP.ConfPages
                     c.Direccion = this.txtDireccion.Text;
                    r = bd.UpdateConf(c);
                 }
-             
-                if (r == 0) {
-                    Acr.UserDialogs.UserDialogs.Instance.Toast("Ocurrio Un error al guardar");
-                }
-                else {
-                    Acr.UserDialogs.UserDialogs.Instance.Toast("Se guardo la Dirección");
-                }
 
+                Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Revisando Conexión!", Acr.UserDialogs.MaskType.Clear);
+                Task.Run(()=>RevisarConexion());
             }
             catch (Exception)
             {
+                Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                 return;
             }
         }
+
+        private void RevisarConexion()
+        {
+                 if (!Utilidades.ConexionServerAsync())
+                {
+                    Device.BeginInvokeOnMainThread( () =>
+                    {
+                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        Acr.UserDialogs.UserDialogs.Instance.Toast("Revise que la direccion este Correcta, no hay conexión !");
+                        return;
+                    });
+                }
+                else {
+                    Device.BeginInvokeOnMainThread( () =>
+                    {
+                        Acr.UserDialogs.UserDialogs.Instance.HideLoading();
+                        Acr.UserDialogs.UserDialogs.Instance.Toast("Se guardo la Dirección y la conexion fue realizada con exito!");
+                        return;
+                    });
+               
+                }
+        }
+
     }
 }

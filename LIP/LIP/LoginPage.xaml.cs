@@ -36,20 +36,10 @@ namespace LIP
         {
             this.IsBusy = true;
 
-            if (!Utilidades.RevisarConexion())
-            {
-                Acr.UserDialogs.UserDialogs.Instance.Toast("Conectese a la red WIFI!");
-                return;
-            }
-
-            if (!Utilidades.ConexionServerAsync()) {
-                Acr.UserDialogs.UserDialogs.Instance.Toast("No hay Conexion con el server!");
-                return;
-            }
-
             if (!string.IsNullOrEmpty(this.txtCedula.Text))
             {
                 Acr.UserDialogs.UserDialogs.Instance.ShowLoading("Iniciando Session!", Acr.UserDialogs.MaskType.Clear);
+             
                 Task.Run(() => this.IniciarSessionAsync()
                 );
             }
@@ -96,7 +86,7 @@ namespace LIP
                         Device.BeginInvokeOnMainThread(async () =>
                         {
                             Acr.UserDialogs.UserDialogs.Instance.HideLoading();
-                            await DisplayAlert("LIP", "Bienvenido :" + usuario.Nombre, "Aceptar");
+                            await DisplayAlert("LIP", "Bienvenido :  " + usuario.Nombre, "Aceptar");
                             await this.Navigation.PushAsync(f, true);
                         });
                     }
@@ -167,7 +157,7 @@ namespace LIP
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        await DisplayAlert("LIP", Resultado.Response != "" ? Resultado.Response : "Ocurrio un error de Conexion con el Servidor", "Aceptar");
+                        await DisplayAlert("LIP", !string.IsNullOrEmpty(Resultado.Response) ? Resultado.Response : "Ocurrio un error de Conexion con el Servidor", "Aceptar");
                         Acr.UserDialogs.UserDialogs.Instance.HideLoading();
                         return;
                     });

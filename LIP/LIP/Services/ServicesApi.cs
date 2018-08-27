@@ -11,20 +11,25 @@ namespace LIP.Services
     class ServicesApi
     {
         public string URL_API;
-        public string PeticionGet(string URL)
+        public  HttpWebResponse PeticionGet(string URL)
         {
+            HttpWebResponse resp;
             try
             {
             string sRespuesta ;
             sRespuesta = "Esta es la respuesta";
+               
+                resp = null;
             var rxcui = "198440";
-            var request = HttpWebRequest.Create(string.Format(@"http://"+ URL_API + "/api/Productos/Guardar"));
+            var request = HttpWebRequest.Create(string.Format(@"http://"+ URL + "/lip/api/login/login"));
             request.ContentType = "application/json";
-            request.Method = "GET";
+            request.Method = "POST";
+            request.Timeout = 3000;
 
-            using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+            using (HttpWebResponse response =  request.GetResponse() as HttpWebResponse)
             {
-                if (response.StatusCode !=   HttpStatusCode.OK)
+                    if (response.StatusCode != HttpStatusCode.OK)
+                        resp = response;
                     Console.Out.WriteLine("Error fetching data. Server returned status code: {0}", response.StatusCode);
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
@@ -41,12 +46,13 @@ namespace LIP.Services
                     //Assert.NotNull(content);
                 }
             }
-             return sRespuesta;
+             return resp;
             }
             catch (Exception)
             {
-                return "";
-                throw;
+
+                return null;
+                //throw;
             }
         }
 

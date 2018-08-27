@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local1="clr-namespace:LIP.CustomRenders"
              x:Class="LIP.BuscarProductoPage">
 
     <ContentPage.ToolbarItems  >
@@ -24,7 +25,7 @@
         <ListView  IsPullToRefreshEnabled="False"   x:Name="lvwProductos" ItemTapped="lvwProductos_ItemTapped" >
             <ListView.ItemTemplate >
                 <DataTemplate>
-                    <ViewCell Tapped="ViewCell_Tapped">
+                    <ViewCell  Tapped="ViewCell_Tapped">
                         <StackLayout Orientation="Vertical">
                             <StackLayout Orientation="Horizontal">
                                 <Image WidthRequest="30" Source="sharp_shopping_basket_24Copia.xml"/>

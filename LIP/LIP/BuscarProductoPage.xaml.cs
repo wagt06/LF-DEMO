@@ -277,6 +277,7 @@ namespace LIP
 
         private void ViewCell_Tapped(object sender, EventArgs e)
         {
+           
             if (buttonSelect == 2)
             {
                 Acr.UserDialogs.UserDialogs.Instance.Toast("Aqui no podes guardar nada, Buscar en inventario o en los productos que tienen diferencias!");
